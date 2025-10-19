@@ -62,14 +62,50 @@ public partial class CreateKaraoke : UserControl
         var outputPath = $"{OutputFolderLabel.Content}\\{fileName}";
 
         var textInfo = string.Empty;
-        foreach (var songLine in KaraokeInfo.SongLines)
+        for (int i = 0; i < KaraokeInfo.SongLines.Length; i++)
         {
-            textInfo += $"drawtext=fontfile={fontFileName}:text='{songLine.Text}':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2:enable='between(t,{songLine.StartTime},{songLine.EndTime})',";
+            var currentSongLine = KaraokeInfo.SongLines[i];
+            var nextSongLine = i < KaraokeInfo.SongLines.Length - 1
+                ? KaraokeInfo.SongLines[i + 1]
+                : null;
+
+            textInfo += CreateSongLineCode(
+                fontFileName,
+                currentSongLine.Text,
+                currentSongLine.StartTime,
+                currentSongLine.EndTime,
+                "red",
+                i % 2 == 1);
+
+            if (nextSongLine != null)
+            {
+                textInfo += CreateSongLineCode(
+                    fontFileName,
+                    nextSongLine.Text,
+                    currentSongLine.StartTime,
+                    currentSongLine.EndTime,
+                    "white",
+                    i % 2 == 0);
+            }
         }
         textInfo = textInfo.TrimEnd(',');
 
         var command = ffmpegPath + " -loop 1 -i \"" + imagePath + "\" -i \"" + musicPath + "\" -shortest -vf \"" + textInfo + "\" -codec:a copy \"" + outputPath + "\" -y";
         var process = Process.Start("cmd.exe", @"/c " + command);
         process.WaitForExit();
+    }
+
+    private string CreateSongLineCode(
+        string fontFileName,
+        string text,
+        long startTime,
+        long endTime,
+        string color,
+        bool needOffset)
+    {
+        var offset = needOffset
+            ? "text_h + 20"
+            : "0";
+        return $"drawtext=fontfile={fontFileName}:text='{text}':fontcolor={color}:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2 + {offset}:enable='between(t,{startTime},{endTime})',";
     }
 }
