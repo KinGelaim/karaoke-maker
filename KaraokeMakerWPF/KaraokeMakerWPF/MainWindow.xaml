@@ -4,42 +4,64 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KaraokeMakerWPF"
+        xmlns:components="clr-namespace:KaraokeMakerWPF.Components.StepByStepControl.Views;assembly=KaraokeMakerWPF.Components"
+        xmlns:controls="clr-namespace:KaraokeMakerWPF.Controls.Views"
+        d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="Создатель Караоке"
         Height="750"
-        Width="800">
-    <Grid>
-        <Button x:Name="SelectImageBtn" Content="Выбрать изображение" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="30" Width="200" Click="SelectImageBtn_Click"/>
-        <Button x:Name="SelectMusicBtn" Content="Выбрать файл mp3" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Height="30" Width="200" Click="SelectMusicBtn_Click"/>
-        <Button x:Name="SelectOutputFolderBtn" Content="Выбрать папку для видео" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Height="30" Width="200" Click="SelectOutputFolderBtn_Click"/>
-        <Button x:Name="SelectFfmpegBtn" Content="Выбрать файл ffmpeg" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Height="30" Width="200" Click="SelectFfmpegBtn_Click"/>
-        <Button x:Name="StartCreatingKaraokeBtn" Content="Начать создание караоке" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Height="30" Width="200" Click="StartCreatingKaraokeBtn_Click"/>
+        MinHeight="500"
+        Width="1200"
+        MinWidth="820">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
 
-        <Label x:Name="ImageLabel" HorizontalAlignment="Left" Margin="215,12,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="MusicLabel" HorizontalAlignment="Left" Margin="215,49,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="OutputFolderLabel" HorizontalAlignment="Left" Margin="215,84,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="FfmpegLabel" HorizontalAlignment="Left" Margin="215,120,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="ResultLabel" HorizontalAlignment="Left" Margin="10,185,0,0" VerticalAlignment="Top"/>
+        <components:StepByStep x:Name="StepByStepControl" Margin="20"/>
 
-        <Button x:Name="SelectTextFileBtn" Content="Выбрать файл с текстом песни" HorizontalAlignment="Left" Margin="10,230,0,0" VerticalAlignment="Top" Height="30" Width="200" Click="SelectTextFileBtn_Click"/>
-        <Label x:Name="TextFileLabel" HorizontalAlignment="Left" Margin="220,232,0,0" VerticalAlignment="Top"/>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <controls:SelectBackground x:Name="SelectBackgroundControl" DataContext="{Binding SelectBackgroundVM}" Visibility="Collapsed"/>
+                <controls:SelectFont x:Name="SelectFontControl" DataContext="{Binding SelectFontVM}" Visibility="Collapsed"/>
+                <controls:SelectMusic x:Name="SelectMusicControl" DataContext="{Binding SelectMusicVM}" Visibility="Collapsed"/>
+                <controls:SelectSongText x:Name="SelectSongTextControl" DataContext="{Binding SelectSongTextVM}" Visibility="Collapsed"/>
+                
+                <controls:CreateSongMarkup
+                    x:Name="CreateSongMarkupControl"
+                    AllInfo="{Binding CreateSongMarkupVM.AllInfo, Mode=TwoWay}"
+                    MusicFilePath="{Binding SelectMusicVM.MusicFilePath}"
+                    SongLines="{Binding SelectSongTextVM.Lines}"
+                    Visibility="Collapsed"
+                />
 
-        <Button x:Name="ParseTextFileBtn" Content="Распарсить текст песни" HorizontalAlignment="Left" Margin="10,265,0,0" VerticalAlignment="Top" Height="30" Width="200" Click="ParseTextFileBtn_Click"/>
+                <controls:KaraokePreview
+                    x:Name="KaraokePreviewControl"
+                    ImageFilePath="{Binding SelectBackgroundVM.ImageFilePath}"
+                    MusicFilePath="{Binding SelectMusicVM.MusicFilePath}"
+                    FontFilePath="{Binding SelectFontVM.FontFilePath}"
+                    SongLines="{Binding SelectSongTextVM.Lines}"
+                    AllInfo="{Binding CreateSongMarkupVM.AllInfo}"
+                    Visibility="Collapsed"
+                />
 
-        <Button x:Name="OpenVideoFileBtn" Content="Открыть видео" HorizontalAlignment="Left" Margin="10,326,0,0" VerticalAlignment="Top" Height="30" Width="200" Click="OpenVideoFileBtn_Click"/>
+                <controls:CreateKaraoke
+                    x:Name="CreateKaraokeControl"
+                    ImageFilePath="{Binding SelectBackgroundVM.ImageFilePath}"
+                    MusicFilePath="{Binding SelectMusicVM.MusicFilePath}"
+                    FontFilePath="{Binding SelectFontVM.FontFilePath}"
+                    SongLines="{Binding SelectSongTextVM.Lines}"
+                    AllInfo="{Binding CreateSongMarkupVM.AllInfo}"
+                    Visibility="Collapsed"
+                />
+            </StackPanel>
+        </ScrollViewer>
 
-        <MediaElement x:Name="VideoMediaElement" HorizontalAlignment="Left" Height="205" Margin="10,361,0,0" VerticalAlignment="Top" Width="314" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Uniform"/>
-
-        <Button x:Name="NextLineBtn" Content="Следующая строка" HorizontalAlignment="Left" Margin="340,361,0,0" VerticalAlignment="Top" Height="30" Width="200" Click="NextLineBtn_Click"/>
-        <Label x:Name="CurrentLineLabel" HorizontalAlignment="Left" Margin="340,396,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="AllInfoList" Margin="340,438,126,167"/>
-
-        <Button x:Name="SelectVideoFileBtn" Content="Выбрать файл с видео" HorizontalAlignment="Left" Margin="10,577,0,0" VerticalAlignment="Top" Height="30" Width="310" Click="SelectVideoFileBtn_Click"/>
-        <Label x:Name="VideoFileLabel" HorizontalAlignment="Left" Margin="326,579,0,0" VerticalAlignment="Top"/>
-
-        <Button x:Name="SelectFontFileBtn" Content="Выбрать файл со шрифтом" HorizontalAlignment="Left" Margin="10,612,0,0" VerticalAlignment="Top" Height="30" Width="310" Click="SelectFontFileBtn_Click"/>
-        <Label x:Name="FontFileLabel"  HorizontalAlignment="Left" Margin="326,614,0,0" VerticalAlignment="Top"/>
-        
-        <Button x:Name="CreateKaraokeVideoBtn" Content="Создать КАРАОКЕ!!!" HorizontalAlignment="Left" Margin="10,647,0,0" VerticalAlignment="Top" Height="30" Width="310" Click="CreateKaraokeVideoBtn_Click"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button x:Name="PreviousStepBtn" Width="150" Click="PreviousStepBtn_Click">Предыдущий шаг</Button>
+            <Button x:Name="NextStepBtn" Width="150" Margin="10,0,0,0" Click="NextStepBtn_Click">Следующий шаг</Button>
+        </StackPanel>
     </Grid>
 </Window>

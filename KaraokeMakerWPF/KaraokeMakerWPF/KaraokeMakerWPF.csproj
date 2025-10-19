@@ -13,4 +13,8 @@
     <Content Include="Resources\Images\microphone.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\KaraokeMakerWPF.Components\KaraokeMakerWPF.Components.csproj" />
+  </ItemGroup>
+
 </Project>

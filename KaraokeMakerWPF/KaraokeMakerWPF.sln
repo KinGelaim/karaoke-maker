@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36429.23 d17.14
+VisualStudioVersion = 17.14.36429.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaraokeMakerWPF", "KaraokeMakerWPF\KaraokeMakerWPF.csproj", "{08F3C034-238D-4A6D-9ED7-7214BA47BDD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaraokeMakerWPF.Components", "KaraokeMakerWPF.Components\KaraokeMakerWPF.Components.csproj", "{D7A5A67F-E00E-45BE-9F9E-FC014C712D6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{08F3C034-238D-4A6D-9ED7-7214BA47BDD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08F3C034-238D-4A6D-9ED7-7214BA47BDD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08F3C034-238D-4A6D-9ED7-7214BA47BDD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7A5A67F-E00E-45BE-9F9E-FC014C712D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7A5A67F-E00E-45BE-9F9E-FC014C712D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7A5A67F-E00E-45BE-9F9E-FC014C712D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7A5A67F-E00E-45BE-9F9E-FC014C712D6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
