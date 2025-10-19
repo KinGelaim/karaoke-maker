@@ -1,11 +1,12 @@
-﻿using System.ComponentModel;
+﻿using KaraokeMakerWPF.Models;
+using System.ComponentModel;
 
 namespace KaraokeMakerWPF.Controls.Models;
 
 public class CreateSongMarkupViewModel
 {
-    private (int, long, long)[] _allInfo = [];
-    public (int, long, long)[] AllInfo
+    private SongLineInfo[] _allInfo = [];
+    public SongLineInfo[] AllInfo
     {
         get => _allInfo;
         set

@@ -1,4 +1,4 @@
-﻿using KaraokeMakerWPF.Controls.Models;
+﻿using KaraokeMakerWPF.Models;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows;
@@ -11,6 +11,33 @@ namespace KaraokeMakerWPF.Controls.Views;
 /// </summary>
 public partial class SelectSongText : UserControl
 {
+    public static readonly DependencyProperty SongTextFilePathProperty =
+        DependencyProperty.Register("SongTextFilePath", typeof(string), typeof(SelectSongText), new PropertyMetadata(string.Empty));
+
+    public string SongTextFilePath
+    {
+        get { return (string)GetValue(SongTextFilePathProperty); }
+        set { SetValue(SongTextFilePathProperty, value); }
+    }
+
+    public static readonly DependencyProperty LinesProperty =
+        DependencyProperty.Register("Lines", typeof(string[]), typeof(SelectSongText), new PropertyMetadata(Array.Empty<string>()));
+
+    public string[] Lines
+    {
+        get { return (string[])GetValue(LinesProperty); }
+        set { SetValue(LinesProperty, value); }
+    }
+
+    public static readonly DependencyProperty KaraokeInfoProperty =
+        DependencyProperty.Register("KaraokeInfo", typeof(KaraokeInfo), typeof(SelectSongText), new PropertyMetadata(null));
+
+    public KaraokeInfo KaraokeInfo
+    {
+        get { return (KaraokeInfo)GetValue(KaraokeInfoProperty); }
+        set { SetValue(KaraokeInfoProperty, value); }
+    }
+
     public SelectSongText()
     {
         InitializeComponent();
@@ -25,25 +52,23 @@ public partial class SelectSongText : UserControl
 
         if (textFileDialog.ShowDialog() == true)
         {
-            if (DataContext is SelectSongTextViewModel viewModel)
-            {
-                viewModel.SongTextFilePath = textFileDialog.FileName;
-            }
+            SongTextFilePath = textFileDialog.FileName;
         }
     }
 
     private void ParseTextFileBtn_Click(object sender, RoutedEventArgs e)
     {
-        if (DataContext is SelectSongTextViewModel viewModel)
+        if (string.IsNullOrWhiteSpace(SongTextFilePath))
         {
-            var textFilePath = viewModel.SongTextFilePath;
-            if (string.IsNullOrWhiteSpace(textFilePath))
-            {
-                MessageBox.Show("Некорректный путь к файлу песни");
-                return;
-            }
-
-            viewModel.Lines = File.ReadAllLines(textFilePath);
+            MessageBox.Show("Некорректный путь к файлу с содержанием песни");
+            return;
         }
+
+        Lines = File.ReadAllLines(SongTextFilePath);
+    }
+
+    private void SaveChangesBtn_Click(object sender, RoutedEventArgs e)
+    {
+        KaraokeInfo.SetSongLines(Lines);
     }
 }

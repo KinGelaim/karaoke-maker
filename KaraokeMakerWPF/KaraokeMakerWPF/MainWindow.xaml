@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:KaraokeMakerWPF"
         xmlns:components="clr-namespace:KaraokeMakerWPF.Components.StepByStepControl.Views;assembly=KaraokeMakerWPF.Components"
         xmlns:controls="clr-namespace:KaraokeMakerWPF.Controls.Views"
-        d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
+        xmlns:models="clr-namespace:KaraokeMakerWPF.Models"
+        d:DataContext="{d:DesignInstance Type=models:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="Создатель Караоке"
         Height="750"
@@ -24,36 +25,45 @@
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <controls:SelectBackground x:Name="SelectBackgroundControl" DataContext="{Binding SelectBackgroundVM}" Visibility="Collapsed"/>
-                <controls:SelectFont x:Name="SelectFontControl" DataContext="{Binding SelectFontVM}" Visibility="Collapsed"/>
-                <controls:SelectMusic x:Name="SelectMusicControl" DataContext="{Binding SelectMusicVM}" Visibility="Collapsed"/>
-                <controls:SelectSongText x:Name="SelectSongTextControl" DataContext="{Binding SelectSongTextVM}" Visibility="Collapsed"/>
+                <controls:SelectBackground
+                    x:Name="SelectBackgroundControl"
+                    ImageFilePath="{Binding KaraokeInfo.ImageFilePath, Mode=TwoWay}"
+                    Visibility="Collapsed"
+                />
+
+                <controls:SelectFont
+                    x:Name="SelectFontControl"
+                    FontFilePath="{Binding KaraokeInfo.FontFilePath, Mode=TwoWay}"
+                    Visibility="Collapsed"
+                />
+
+                <controls:SelectMusic
+                    x:Name="SelectMusicControl"
+                    MusicFilePath="{Binding KaraokeInfo.MusicFilePath, Mode=TwoWay}"
+                    Visibility="Collapsed"
+                />
+
+                <controls:SelectSongText
+                    x:Name="SelectSongTextControl"
+                    KaraokeInfo="{Binding KaraokeInfo}"
+                    Visibility="Collapsed"
+                />
                 
                 <controls:CreateSongMarkup
                     x:Name="CreateSongMarkupControl"
-                    AllInfo="{Binding CreateSongMarkupVM.AllInfo, Mode=TwoWay}"
-                    MusicFilePath="{Binding SelectMusicVM.MusicFilePath}"
-                    SongLines="{Binding SelectSongTextVM.Lines}"
+                    KaraokeInfo="{Binding KaraokeInfo, Mode=TwoWay}"
                     Visibility="Collapsed"
                 />
 
                 <controls:KaraokePreview
                     x:Name="KaraokePreviewControl"
-                    ImageFilePath="{Binding SelectBackgroundVM.ImageFilePath}"
-                    MusicFilePath="{Binding SelectMusicVM.MusicFilePath}"
-                    FontFilePath="{Binding SelectFontVM.FontFilePath}"
-                    SongLines="{Binding SelectSongTextVM.Lines}"
-                    AllInfo="{Binding CreateSongMarkupVM.AllInfo}"
+                    KaraokeInfo="{Binding KaraokeInfo}"
                     Visibility="Collapsed"
                 />
 
                 <controls:CreateKaraoke
                     x:Name="CreateKaraokeControl"
-                    ImageFilePath="{Binding SelectBackgroundVM.ImageFilePath}"
-                    MusicFilePath="{Binding SelectMusicVM.MusicFilePath}"
-                    FontFilePath="{Binding SelectFontVM.FontFilePath}"
-                    SongLines="{Binding SelectSongTextVM.Lines}"
-                    AllInfo="{Binding CreateSongMarkupVM.AllInfo}"
+                    KaraokeInfo="{Binding KaraokeInfo}"
                     Visibility="Collapsed"
                 />
             </StackPanel>

@@ -8,16 +8,16 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
         <Label Content="Путь к фону:"/>
-        <Label Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ImageFilePath}" VerticalAlignment="Top"/>
+        <Label Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=KaraokeInfo.ImageFilePath}" VerticalAlignment="Top"/>
 
         <Label Content="Путь к файлу музыки:"/>
-        <Label Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=MusicFilePath}" VerticalAlignment="Top"/>
+        <Label Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=KaraokeInfo.MusicFilePath}" VerticalAlignment="Top"/>
 
         <Label Content="Путь к шрифту:"/>
-        <Label Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=FontFilePath}" VerticalAlignment="Top"/>
+        <Label Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=KaraokeInfo.FontFilePath}" VerticalAlignment="Top"/>
 
         <Grid>
-            <Image Source="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ImageFilePath}" Width="800" Height="Auto"/>
+            <Image Source="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=KaraokeInfo.ImageFilePath}" Width="800" Height="Auto"/>
             <TextBlock
                 x:Name="SongLabel"
                 HorizontalAlignment="Center"

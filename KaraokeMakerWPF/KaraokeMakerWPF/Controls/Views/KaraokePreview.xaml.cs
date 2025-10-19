@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using KaraokeMakerWPF.Models;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -12,49 +13,13 @@ public partial class KaraokePreview : UserControl
 {
     private readonly MediaPlayer _mediaPlayer = new();
 
-    public static readonly DependencyProperty ImageFilePathProperty =
-        DependencyProperty.Register("ImageFilePath", typeof(string), typeof(KaraokePreview), new PropertyMetadata(null));
+    public static readonly DependencyProperty KaraokeInfoProperty =
+        DependencyProperty.Register("KaraokeInfo", typeof(KaraokeInfo), typeof(KaraokePreview), new PropertyMetadata(null));
 
-    public string ImageFilePath
+    public KaraokeInfo KaraokeInfo
     {
-        get { return (string)GetValue(ImageFilePathProperty); }
-        set { SetValue(ImageFilePathProperty, value); }
-    }
-
-    public static readonly DependencyProperty MusicFilePathProperty =
-        DependencyProperty.Register("MusicFilePath", typeof(string), typeof(KaraokePreview), new PropertyMetadata(null));
-
-    public string MusicFilePath
-    {
-        get { return (string)GetValue(MusicFilePathProperty); }
-        set { SetValue(MusicFilePathProperty, value); }
-    }
-
-    public static readonly DependencyProperty FontFilePathProperty =
-        DependencyProperty.Register("FontFilePath", typeof(string), typeof(KaraokePreview), new PropertyMetadata(null));
-
-    public string FontFilePath
-    {
-        get { return (string)GetValue(FontFilePathProperty); }
-        set { SetValue(FontFilePathProperty, value); }
-    }
-
-    public static readonly DependencyProperty SongLinesProperty =
-        DependencyProperty.Register("SongLines", typeof(string[]), typeof(KaraokePreview), new PropertyMetadata(null));
-
-    public string[] SongLines
-    {
-        get { return (string[])GetValue(SongLinesProperty); }
-        set { SetValue(SongLinesProperty, value); }
-    }
-
-    public static readonly DependencyProperty AllInfoProperty =
-        DependencyProperty.Register("AllInfo", typeof((int, long, long)[]), typeof(KaraokePreview), new PropertyMetadata(null));
-
-    public (int, long, long)[] AllInfo
-    {
-        get { return ((int, long, long)[])GetValue(AllInfoProperty); }
-        set { SetValue(AllInfoProperty, value); }
+        get { return (KaraokeInfo)GetValue(KaraokeInfoProperty); }
+        set { SetValue(KaraokeInfoProperty, value); }
     }
 
     public KaraokePreview()
@@ -64,7 +29,7 @@ public partial class KaraokePreview : UserControl
 
     private void StartBtn_Click(object sender, RoutedEventArgs e)
     {
-        _mediaPlayer.Open(new Uri(MusicFilePath));
+        _mediaPlayer.Open(new Uri(KaraokeInfo.MusicFilePath));
 
         var timer = new DispatcherTimer
         {
@@ -82,8 +47,9 @@ public partial class KaraokePreview : UserControl
         if (_mediaPlayer.Source != null)
         {
             var currentSecond = _mediaPlayer.Position.Seconds;
-            var currentLineIndex = AllInfo.FirstOrDefault(x => x.Item2 <= currentSecond && currentSecond <= x.Item3).Item1;
-            var currentLine = SongLines[currentLineIndex];
+            var currentLine = KaraokeInfo.SongLines
+                .FirstOrDefault(x => x.StartTime <= currentSecond && currentSecond <= x.EndTime)?
+                .Text;
 
             SongLabel.Text = currentLine;
         }

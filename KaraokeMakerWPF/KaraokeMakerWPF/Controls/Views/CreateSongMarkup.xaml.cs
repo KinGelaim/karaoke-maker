@@ -1,4 +1,4 @@
-﻿using KaraokeMakerWPF.Controls.Models;
+﻿using KaraokeMakerWPF.Models;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -25,30 +25,21 @@ public partial class CreateSongMarkup : UserControl
 
     private readonly List<(int, long, long)> _allInfo = [];
 
-    public static readonly DependencyProperty AllInfoProperty =
-        DependencyProperty.Register("AllInfo", typeof((int, long, long)[]), typeof(CreateSongMarkup), new PropertyMetadata(null));
+    public static readonly DependencyProperty KaraokeInfoProperty =
+        DependencyProperty.Register("KaraokeInfo", typeof(KaraokeInfo), typeof(CreateSongMarkup), new PropertyMetadata(null));
 
-    public (int, long, long)[] AllInfo
+    public KaraokeInfo KaraokeInfo
     {
-        get { return ((int, long, long)[])GetValue(AllInfoProperty); }
-        set { SetValue(AllInfoProperty, value); }
-    }
-
-    public static readonly DependencyProperty MusicFilePathProperty =
-        DependencyProperty.Register("MusicFilePath", typeof(string), typeof(CreateSongMarkup), new PropertyMetadata(null));
-
-    public string MusicFilePath
-    {
-        get { return (string)GetValue(MusicFilePathProperty); }
-        set { SetValue(MusicFilePathProperty, value); }
+        get { return (KaraokeInfo)GetValue(KaraokeInfoProperty); }
+        set { SetValue(KaraokeInfoProperty, value); }
     }
 
     public static readonly DependencyProperty SongLinesProperty =
-        DependencyProperty.Register("SongLines", typeof(string[]), typeof(CreateSongMarkup), new PropertyMetadata(null));
+        DependencyProperty.Register("SongLines", typeof(SongLineInfo[]), typeof(CreateSongMarkup), new PropertyMetadata(Array.Empty<SongLineInfo>()));
 
-    public string[] SongLines
+    public SongLineInfo[] SongLines
     {
-        get { return (string[])GetValue(SongLinesProperty); }
+        get { return (SongLineInfo[])GetValue(SongLinesProperty); }
         set { SetValue(SongLinesProperty, value); }
     }
 
@@ -59,17 +50,17 @@ public partial class CreateSongMarkup : UserControl
 
     private void PlayBtn_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(MusicFilePath))
+        if (string.IsNullOrWhiteSpace(KaraokeInfo.MusicFilePath))
         {
             return;
         }
 
         _currentLineIndex = 0;
-        _maxLineIndex = SongLines.Length;
+        _maxLineIndex = KaraokeInfo.SongLines.Length;
         UpdateCurrentLineLabel();
 
 
-        _mediaPlayer.Open(new Uri(MusicFilePath));
+        _mediaPlayer.Open(new Uri(KaraokeInfo.MusicFilePath));
 
         var timer = new DispatcherTimer
         {
@@ -139,16 +130,17 @@ public partial class CreateSongMarkup : UserControl
             return;
         }
 
-        CurrentLineLabel.Content = SongLines[_currentLineIndex];
+        CurrentLineLabel.Content = KaraokeInfo.SongLines[_currentLineIndex].Text;
     }
 
     private void UpdateAllInfoList()
     {
-        AllInfoList.Items.Clear();
+        foreach (var songLine in KaraokeInfo.SongLines)
+        {
+            var info = _allInfo.First(x => x.Item1 == songLine.Index);
+            songLine.SetTime(info.Item2, info.Item3);
+        }
 
-        var items = _allInfo.Select(x => $"{x.Item1} - {x.Item2} - {x.Item3}");
-        AllInfoList.ItemsSource = items;
-
-        AllInfo = [.. _allInfo];
+        SongLines = KaraokeInfo.SongLines;
     }
 }

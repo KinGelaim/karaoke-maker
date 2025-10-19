@@ -1,5 +1,4 @@
-﻿using KaraokeMakerWPF.Controls.Models;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,6 +9,15 @@ namespace KaraokeMakerWPF.Controls.Views;
 /// </summary>
 public partial class SelectFont : UserControl
 {
+    public static readonly DependencyProperty FontFilePathProperty =
+        DependencyProperty.Register("FontFilePath", typeof(string), typeof(SelectFont), new PropertyMetadata(null));
+
+    public string FontFilePath
+    {
+        get { return (string)GetValue(FontFilePathProperty); }
+        set { SetValue(FontFilePathProperty, value); }
+    }
+
     public SelectFont()
     {
         InitializeComponent();
@@ -24,10 +32,7 @@ public partial class SelectFont : UserControl
 
         if (fontFileDialog.ShowDialog() == true)
         {
-            if (DataContext is SelectFontViewModel viewModel)
-            {
-                viewModel.FontFilePath = fontFileDialog.FileName;
-            }
+            FontFilePath = fontFileDialog.FileName;
         }
     }
 }
