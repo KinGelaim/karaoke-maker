@@ -1,5 +1,4 @@
-﻿using KaraokeMakerWPF.Components.StepByStepControl.ViewModels;
-using KaraokeMakerWPF.ViewModels;
+﻿using KaraokeMakerWPF.ViewModels;
 using System.Windows;
 
 namespace KaraokeMakerWPF;

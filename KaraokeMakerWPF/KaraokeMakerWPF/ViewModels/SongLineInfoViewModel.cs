@@ -19,7 +19,7 @@ public class SongLineInfoViewModel : INotifyPropertyChanged
     public long StartTime
     {
         get => _startTime;
-        private set
+        set
         {
             _startTime = value;
             OnPropertyChanged(nameof(StartTime));
@@ -30,7 +30,7 @@ public class SongLineInfoViewModel : INotifyPropertyChanged
     public long EndTime
     {
         get => _endTime;
-        private set
+        set
         {
             _endTime = value;
             OnPropertyChanged(nameof(EndTime));

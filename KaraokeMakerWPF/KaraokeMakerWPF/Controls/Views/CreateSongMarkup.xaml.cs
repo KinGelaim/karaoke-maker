@@ -1,6 +1,7 @@
 ﻿using KaraokeMakerWPF.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -18,7 +19,6 @@ public partial class CreateSongMarkup : UserControl
 
     private bool _isPlayMusic = false;
     private bool _isStartText = false;
-    private bool _isSongEnd = false;
 
     private long _startTime = 0;
     private long _endTime = 0;
@@ -65,6 +65,12 @@ public partial class CreateSongMarkup : UserControl
 
         _mediaPlayer.Play();
         _isPlayMusic = true;
+        _isStartText = false;
+    }
+
+    private void StopBtn_Click(object sender, RoutedEventArgs e)
+    {
+        _mediaPlayer.Stop();
     }
 
     private void Timer_Tick(object? sender, EventArgs e)
@@ -84,7 +90,7 @@ public partial class CreateSongMarkup : UserControl
 
     private void NextLineBtn_Click(object sender, RoutedEventArgs e)
     {
-        if (!_isPlayMusic || _isSongEnd)
+        if (!_isPlayMusic)
         {
             return;
         }
@@ -110,7 +116,7 @@ public partial class CreateSongMarkup : UserControl
 
             if (_currentLineIndex >= _maxLineIndex)
             {
-                _isSongEnd = true;
+                _isPlayMusic = false;
                 _mediaPlayer.Stop();
             }
         }
@@ -124,5 +130,34 @@ public partial class CreateSongMarkup : UserControl
         }
 
         CurrentLineLabel.Content = KaraokeInfoVM.SongLines[_currentLineIndex].Text;
+    }
+
+    private void IndexTextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount >= 2)
+        {
+            var text = ((TextBlock)sender).Text;
+            var index = int.Parse(text);
+
+            var songLine = KaraokeInfoVM.SongLines.First(x => x.Index == index);
+
+            _mediaPlayer.Stop();
+
+            _mediaPlayer.Position = TimeSpan.FromSeconds(songLine.StartTime);
+
+            var timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(songLine.EndTime - songLine.StartTime)
+            };
+
+            timer.Tick += (s, ev) =>
+            {
+                _mediaPlayer.Stop();
+                timer.Stop();
+            };
+
+            timer.Start();
+            _mediaPlayer.Play();
+        }
     }
 }

@@ -23,51 +23,56 @@
 
         <components:StepByStep x:Name="StepByStepControl" Margin="20"/>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-                <controls:SelectBackground
-                    x:Name="SelectBackgroundControl"
-                    ImageFilePath="{Binding KaraokeInfoVM.ImageFilePath, Mode=TwoWay}"
-                    Visibility="Collapsed"
-                />
+        <Grid Grid.Row="1">
+            <controls:SelectBackground
+                x:Name="SelectBackgroundControl"
+                ImageFilePath="{Binding KaraokeInfoVM.ImageFilePath, Mode=TwoWay}"
+                Visibility="Collapsed"
+                VerticalAlignment="Top"
+            />
 
-                <controls:SelectFont
-                    x:Name="SelectFontControl"
-                    FontFilePath="{Binding KaraokeInfoVM.FontFilePath, Mode=TwoWay}"
-                    Visibility="Collapsed"
-                />
+            <controls:SelectFont
+                x:Name="SelectFontControl"
+                FontFilePath="{Binding KaraokeInfoVM.FontFilePath, Mode=TwoWay}"
+                Visibility="Collapsed"
+                VerticalAlignment="Top"
+            />
 
-                <controls:SelectMusic
-                    x:Name="SelectMusicControl"
-                    MusicFilePath="{Binding KaraokeInfoVM.MusicFilePath, Mode=TwoWay}"
-                    Visibility="Collapsed"
-                />
+            <controls:SelectMusic
+                x:Name="SelectMusicControl"
+                MusicFilePath="{Binding KaraokeInfoVM.MusicFilePath, Mode=TwoWay}"
+                Visibility="Collapsed"
+                VerticalAlignment="Top"
+            />
 
-                <controls:SelectSongText
-                    x:Name="SelectSongTextControl"
-                    KaraokeInfoVM="{Binding KaraokeInfoVM}"
-                    Visibility="Collapsed"
-                />
-                
-                <controls:CreateSongMarkup
-                    x:Name="CreateSongMarkupControl"
-                    KaraokeInfoVM="{Binding KaraokeInfoVM}"
-                    Visibility="Collapsed"
-                />
+            <controls:SelectSongText
+                x:Name="SelectSongTextControl"
+                KaraokeInfoVM="{Binding KaraokeInfoVM}"
+                Visibility="Collapsed"
+                VerticalAlignment="Top"
+            />
 
-                <controls:KaraokePreview
-                    x:Name="KaraokePreviewControl"
-                    KaraokeInfoVM="{Binding KaraokeInfoVM}"
-                    Visibility="Collapsed"
-                />
+            <controls:CreateSongMarkup
+                x:Name="CreateSongMarkupControl"
+                KaraokeInfoVM="{Binding KaraokeInfoVM}"
+                Visibility="Collapsed"
+                VerticalAlignment="Top"
+            />
 
-                <controls:CreateKaraoke
-                    x:Name="CreateKaraokeControl"
-                    KaraokeInfoVM="{Binding KaraokeInfoVM}"
-                    Visibility="Collapsed"
-                />
-            </StackPanel>
-        </ScrollViewer>
+            <controls:KaraokePreview
+                x:Name="KaraokePreviewControl"
+                KaraokeInfoVM="{Binding KaraokeInfoVM}"
+                Visibility="Collapsed"
+                VerticalAlignment="Top"
+            />
+
+            <controls:CreateKaraoke
+                x:Name="CreateKaraokeControl"
+                KaraokeInfoVM="{Binding KaraokeInfoVM}"
+                Visibility="Collapsed"
+                VerticalAlignment="Top"
+            />
+        </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Button x:Name="PreviousStepBtn" Width="150" Click="PreviousStepBtn_Click">Предыдущий шаг</Button>

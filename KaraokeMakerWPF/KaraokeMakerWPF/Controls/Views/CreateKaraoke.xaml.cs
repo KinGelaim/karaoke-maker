@@ -55,7 +55,7 @@ public partial class CreateKaraoke : UserControl
 
     private void CreateKaraokeVideoBtn_Click(object sender, RoutedEventArgs e)
     {
-        var ffmpegPath = FfmpegLabel.Content;
+        var ffmpegPath = FfmpegLabel.Content.ToString();
         var imagePath = KaraokeInfoVM.ImageFilePath;
         var musicPath = KaraokeInfoVM.MusicFilePath;
 
