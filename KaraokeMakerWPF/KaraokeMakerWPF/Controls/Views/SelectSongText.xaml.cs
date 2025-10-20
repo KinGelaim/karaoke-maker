@@ -1,4 +1,4 @@
-﻿using KaraokeMakerWPF.Models;
+﻿using KaraokeMakerWPF.ViewModels;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows;
@@ -12,7 +12,11 @@ namespace KaraokeMakerWPF.Controls.Views;
 public partial class SelectSongText : UserControl
 {
     public static readonly DependencyProperty SongTextFilePathProperty =
-        DependencyProperty.Register("SongTextFilePath", typeof(string), typeof(SelectSongText), new PropertyMetadata(string.Empty));
+        DependencyProperty.Register(
+            nameof(SongTextFilePath),
+            typeof(string),
+            typeof(SelectSongText),
+            new PropertyMetadata(string.Empty));
 
     public string SongTextFilePath
     {
@@ -20,21 +24,16 @@ public partial class SelectSongText : UserControl
         set { SetValue(SongTextFilePathProperty, value); }
     }
 
-    public static readonly DependencyProperty LinesProperty =
-        DependencyProperty.Register("Lines", typeof(string[]), typeof(SelectSongText), new PropertyMetadata(Array.Empty<string>()));
-
-    public string[] Lines
-    {
-        get { return (string[])GetValue(LinesProperty); }
-        set { SetValue(LinesProperty, value); }
-    }
-
     public static readonly DependencyProperty KaraokeInfoProperty =
-        DependencyProperty.Register("KaraokeInfo", typeof(KaraokeInfo), typeof(SelectSongText), new PropertyMetadata(null));
+        DependencyProperty.Register(
+            nameof(KaraokeInfoVM),
+            typeof(KaraokeInfoViewModel),
+            typeof(SelectSongText),
+            new PropertyMetadata(null));
 
-    public KaraokeInfo KaraokeInfo
+    public KaraokeInfoViewModel KaraokeInfoVM
     {
-        get { return (KaraokeInfo)GetValue(KaraokeInfoProperty); }
+        get { return (KaraokeInfoViewModel)GetValue(KaraokeInfoProperty); }
         set { SetValue(KaraokeInfoProperty, value); }
     }
 
@@ -64,11 +63,7 @@ public partial class SelectSongText : UserControl
             return;
         }
 
-        Lines = File.ReadAllLines(SongTextFilePath);
-    }
-
-    private void SaveChangesBtn_Click(object sender, RoutedEventArgs e)
-    {
-        KaraokeInfo.SetSongLines(Lines);
+        var lines = File.ReadAllLines(SongTextFilePath);
+        KaraokeInfoVM.SetSongLines(lines);
     }
 }

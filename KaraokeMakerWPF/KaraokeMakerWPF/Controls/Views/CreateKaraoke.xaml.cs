@@ -1,4 +1,4 @@
-﻿using KaraokeMakerWPF.Models;
+﻿using KaraokeMakerWPF.ViewModels;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
@@ -13,11 +13,15 @@ namespace KaraokeMakerWPF.Controls.Views;
 public partial class CreateKaraoke : UserControl
 {
     public static readonly DependencyProperty KaraokeInfoProperty =
-        DependencyProperty.Register("KaraokeInfo", typeof(KaraokeInfo), typeof(CreateKaraoke), new PropertyMetadata(null));
+        DependencyProperty.Register(
+            nameof(KaraokeInfoVM),
+            typeof(KaraokeInfoViewModel),
+            typeof(CreateKaraoke),
+            new PropertyMetadata(null));
 
-    public KaraokeInfo KaraokeInfo
+    public KaraokeInfoViewModel KaraokeInfoVM
     {
-        get { return (KaraokeInfo)GetValue(KaraokeInfoProperty); }
+        get { return (KaraokeInfoViewModel)GetValue(KaraokeInfoProperty); }
         set { SetValue(KaraokeInfoProperty, value); }
     }
 
@@ -52,21 +56,21 @@ public partial class CreateKaraoke : UserControl
     private void CreateKaraokeVideoBtn_Click(object sender, RoutedEventArgs e)
     {
         var ffmpegPath = FfmpegLabel.Content;
-        var imagePath = KaraokeInfo.ImageFilePath;
-        var musicPath = KaraokeInfo.MusicFilePath;
+        var imagePath = KaraokeInfoVM.ImageFilePath;
+        var musicPath = KaraokeInfoVM.MusicFilePath;
 
         // Шрифт должен лежать возле либы (TODO: поправить на абсолютный путь?)
-        var fontFileName = Path.GetFileName(KaraokeInfo.FontFilePath);
+        var fontFileName = Path.GetFileName(KaraokeInfoVM.FontFilePath);
 
         var fileName = $"Karaoke_{Guid.NewGuid()}.mp4";
         var outputPath = $"{OutputFolderLabel.Content}\\{fileName}";
 
         var textInfo = string.Empty;
-        for (int i = 0; i < KaraokeInfo.SongLines.Length; i++)
+        for (int i = 0; i < KaraokeInfoVM.SongLines.Count; i++)
         {
-            var currentSongLine = KaraokeInfo.SongLines[i];
-            var nextSongLine = i < KaraokeInfo.SongLines.Length - 1
-                ? KaraokeInfo.SongLines[i + 1]
+            var currentSongLine = KaraokeInfoVM.SongLines[i];
+            var nextSongLine = i < KaraokeInfoVM.SongLines.Count - 1
+                ? KaraokeInfoVM.SongLines[i + 1]
                 : null;
 
             textInfo += CreateSongLineCode(

@@ -10,7 +10,11 @@ namespace KaraokeMakerWPF.Controls.Views;
 public partial class SelectBackground : UserControl
 {
     public static readonly DependencyProperty ImageFilePathProperty =
-        DependencyProperty.Register("ImageFilePath", typeof(string), typeof(SelectBackground), new PropertyMetadata(null));
+        DependencyProperty.Register(
+            nameof(ImageFilePath),
+            typeof(string),
+            typeof(SelectBackground),
+            new PropertyMetadata(string.Empty));
 
     public string ImageFilePath
     {

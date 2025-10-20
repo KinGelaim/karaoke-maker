@@ -1,4 +1,4 @@
-﻿using KaraokeMakerWPF.Models;
+﻿using KaraokeMakerWPF.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -23,24 +23,17 @@ public partial class CreateSongMarkup : UserControl
     private long _startTime = 0;
     private long _endTime = 0;
 
-    private readonly List<(int, long, long)> _allInfo = [];
-
     public static readonly DependencyProperty KaraokeInfoProperty =
-        DependencyProperty.Register("KaraokeInfo", typeof(KaraokeInfo), typeof(CreateSongMarkup), new PropertyMetadata(null));
+        DependencyProperty.Register(
+            nameof(KaraokeInfoVM),
+            typeof(KaraokeInfoViewModel),
+            typeof(CreateSongMarkup),
+            new PropertyMetadata(null));
 
-    public KaraokeInfo KaraokeInfo
+    public KaraokeInfoViewModel KaraokeInfoVM
     {
-        get { return (KaraokeInfo)GetValue(KaraokeInfoProperty); }
+        get { return (KaraokeInfoViewModel)GetValue(KaraokeInfoProperty); }
         set { SetValue(KaraokeInfoProperty, value); }
-    }
-
-    public static readonly DependencyProperty SongLinesProperty =
-        DependencyProperty.Register("SongLines", typeof(SongLineInfo[]), typeof(CreateSongMarkup), new PropertyMetadata(Array.Empty<SongLineInfo>()));
-
-    public SongLineInfo[] SongLines
-    {
-        get { return (SongLineInfo[])GetValue(SongLinesProperty); }
-        set { SetValue(SongLinesProperty, value); }
     }
 
     public CreateSongMarkup()
@@ -50,17 +43,17 @@ public partial class CreateSongMarkup : UserControl
 
     private void PlayBtn_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(KaraokeInfo.MusicFilePath))
+        if (string.IsNullOrWhiteSpace(KaraokeInfoVM.MusicFilePath))
         {
             return;
         }
 
         _currentLineIndex = 0;
-        _maxLineIndex = KaraokeInfo.SongLines.Length;
+        _maxLineIndex = KaraokeInfoVM.SongLines.Count;
         UpdateCurrentLineLabel();
 
 
-        _mediaPlayer.Open(new Uri(KaraokeInfo.MusicFilePath));
+        _mediaPlayer.Open(new Uri(KaraokeInfoVM.MusicFilePath));
 
         var timer = new DispatcherTimer
         {
@@ -105,20 +98,20 @@ public partial class CreateSongMarkup : UserControl
         {
             _endTime = _mediaPlayer.Position.Seconds;
 
-            _allInfo.Add((_currentLineIndex, _startTime, _endTime));
-
             if (_currentLineIndex < _maxLineIndex)
             {
+                var currentSongLine = KaraokeInfoVM.SongLines.First(x => x.Index == _currentLineIndex);
+                currentSongLine.SetTime(_startTime, _endTime);
+
                 _currentLineIndex++;
                 _startTime = _endTime;
                 UpdateCurrentLineLabel();
             }
-            else
+
+            if (_currentLineIndex >= _maxLineIndex)
             {
                 _isSongEnd = true;
                 _mediaPlayer.Stop();
-
-                UpdateAllInfoList();
             }
         }
     }
@@ -130,17 +123,6 @@ public partial class CreateSongMarkup : UserControl
             return;
         }
 
-        CurrentLineLabel.Content = KaraokeInfo.SongLines[_currentLineIndex].Text;
-    }
-
-    private void UpdateAllInfoList()
-    {
-        foreach (var songLine in KaraokeInfo.SongLines)
-        {
-            var info = _allInfo.First(x => x.Item1 == songLine.Index);
-            songLine.SetTime(info.Item2, info.Item3);
-        }
-
-        SongLines = KaraokeInfo.SongLines;
+        CurrentLineLabel.Content = KaraokeInfoVM.SongLines[_currentLineIndex].Text;
     }
 }

@@ -10,7 +10,11 @@ namespace KaraokeMakerWPF.Controls.Views;
 public partial class SelectMusic : UserControl
 {
     public static readonly DependencyProperty MusicFilePathProperty =
-        DependencyProperty.Register("MusicFilePath", typeof(string), typeof(SelectMusic), new PropertyMetadata(null));
+        DependencyProperty.Register(
+            nameof(MusicFilePath),
+            typeof(string),
+            typeof(SelectMusic),
+            new PropertyMetadata(string.Empty));
 
     public string MusicFilePath
     {

@@ -10,7 +10,11 @@ namespace KaraokeMakerWPF.Controls.Views;
 public partial class SelectFont : UserControl
 {
     public static readonly DependencyProperty FontFilePathProperty =
-        DependencyProperty.Register("FontFilePath", typeof(string), typeof(SelectFont), new PropertyMetadata(null));
+        DependencyProperty.Register(
+            nameof(FontFilePath),
+            typeof(string),
+            typeof(SelectFont),
+            new PropertyMetadata(string.Empty));
 
     public string FontFilePath
     {

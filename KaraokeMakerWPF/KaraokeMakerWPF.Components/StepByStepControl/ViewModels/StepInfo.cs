@@ -1,6 +1,7 @@
-﻿using System.ComponentModel;
+﻿using KaraokeMakerWPF.Components.StepByStepControl.Models;
+using System.ComponentModel;
 
-namespace KaraokeMakerWPF.Components.StepByStepControl.Models;
+namespace KaraokeMakerWPF.Components.StepByStepControl.ViewModels;
 
 public class StepInfo : INotifyPropertyChanged
 {
@@ -24,10 +25,14 @@ public class StepInfo : INotifyPropertyChanged
         OnPropertyChanged(nameof(RightPath));
     }
 
+    #region INotifyPropertyChanged
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    protected virtual void OnPropertyChanged(string propertyName)
+    protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    #endregion INotifyPropertyChanged
 }

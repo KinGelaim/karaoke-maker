@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:KaraokeMakerWPF"
         xmlns:components="clr-namespace:KaraokeMakerWPF.Components.StepByStepControl.Views;assembly=KaraokeMakerWPF.Components"
         xmlns:controls="clr-namespace:KaraokeMakerWPF.Controls.Views"
-        xmlns:models="clr-namespace:KaraokeMakerWPF.Models"
+        xmlns:models="clr-namespace:KaraokeMakerWPF.ViewModels"
         d:DataContext="{d:DesignInstance Type=models:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="Создатель Караоке"
@@ -27,43 +27,43 @@
             <StackPanel>
                 <controls:SelectBackground
                     x:Name="SelectBackgroundControl"
-                    ImageFilePath="{Binding KaraokeInfo.ImageFilePath, Mode=TwoWay}"
+                    ImageFilePath="{Binding KaraokeInfoVM.ImageFilePath, Mode=TwoWay}"
                     Visibility="Collapsed"
                 />
 
                 <controls:SelectFont
                     x:Name="SelectFontControl"
-                    FontFilePath="{Binding KaraokeInfo.FontFilePath, Mode=TwoWay}"
+                    FontFilePath="{Binding KaraokeInfoVM.FontFilePath, Mode=TwoWay}"
                     Visibility="Collapsed"
                 />
 
                 <controls:SelectMusic
                     x:Name="SelectMusicControl"
-                    MusicFilePath="{Binding KaraokeInfo.MusicFilePath, Mode=TwoWay}"
+                    MusicFilePath="{Binding KaraokeInfoVM.MusicFilePath, Mode=TwoWay}"
                     Visibility="Collapsed"
                 />
 
                 <controls:SelectSongText
                     x:Name="SelectSongTextControl"
-                    KaraokeInfo="{Binding KaraokeInfo}"
+                    KaraokeInfoVM="{Binding KaraokeInfoVM}"
                     Visibility="Collapsed"
                 />
                 
                 <controls:CreateSongMarkup
                     x:Name="CreateSongMarkupControl"
-                    KaraokeInfo="{Binding KaraokeInfo, Mode=TwoWay}"
+                    KaraokeInfoVM="{Binding KaraokeInfoVM}"
                     Visibility="Collapsed"
                 />
 
                 <controls:KaraokePreview
                     x:Name="KaraokePreviewControl"
-                    KaraokeInfo="{Binding KaraokeInfo}"
+                    KaraokeInfoVM="{Binding KaraokeInfoVM}"
                     Visibility="Collapsed"
                 />
 
                 <controls:CreateKaraoke
                     x:Name="CreateKaraokeControl"
-                    KaraokeInfo="{Binding KaraokeInfo}"
+                    KaraokeInfoVM="{Binding KaraokeInfoVM}"
                     Visibility="Collapsed"
                 />
             </StackPanel>

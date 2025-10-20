@@ -1,5 +1,5 @@
-﻿using KaraokeMakerWPF.Components.StepByStepControl.Models;
-using KaraokeMakerWPF.Models;
+﻿using KaraokeMakerWPF.Components.StepByStepControl.ViewModels;
+using KaraokeMakerWPF.ViewModels;
 using System.Windows;
 
 namespace KaraokeMakerWPF;
@@ -16,14 +16,15 @@ public partial class MainWindow : Window
 
     private void InitializeSteps()
     {
-        // TODO: завернуть во внутреннию часть компонента, чтобы не руками проставлять порядковые номера
-        StepByStepControl.Steps.Add(new StepInfo("Фон", 1));
-        StepByStepControl.Steps.Add(new StepInfo("Шрифт", 2));
-        StepByStepControl.Steps.Add(new StepInfo("Музыка", 3));
-        StepByStepControl.Steps.Add(new StepInfo("Текст песни", 4));
-        StepByStepControl.Steps.Add(new StepInfo("Разметка\r\nкараоке", 5));
-        StepByStepControl.Steps.Add(new StepInfo("Предпросмотр\r\nрезультата", 6));
-        StepByStepControl.Steps.Add(new StepInfo("Создание\r\nкараоке", 7));
+        StepByStepControl.SetSteps([
+            "Фон",
+            "Шрифт",
+            "Музыка",
+            "Текст песни",
+            "Разметка\r\nкараоке",
+            "Предпросмотр\r\nрезультата",
+            "Создание\r\nкараоке"
+        ]);
         StepByStepControl.SetIndex(0);
 
         UpdateCurrentStepsVisibility();

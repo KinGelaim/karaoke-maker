@@ -1,4 +1,5 @@
 ﻿using KaraokeMakerWPF.Components.StepByStepControl.Models;
+using KaraokeMakerWPF.Components.StepByStepControl.ViewModels;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 
@@ -19,6 +20,14 @@ public partial class StepByStep : UserControl
     {
         InitializeComponent();
         Items.ItemsSource = Steps;
+    }
+
+    public void SetSteps(string[] steps)
+    {
+        for (var i = 0; i < steps.Length; i++)
+        {
+            Steps.Add(new StepInfo(steps[i], i + 1));
+        }
     }
 
     public void SetIndex(int idx)

@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KaraokeMakerWPF.Controls.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="CreateSongMarkupRoot">
     <StackPanel>
         <Label Content="Путь к файлу музыки:"/>
-        <Label Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=KaraokeInfo.MusicFilePath}" VerticalAlignment="Top"/>
+        <Label Content="{Binding KaraokeInfoVM.MusicFilePath, ElementName=CreateSongMarkupRoot}" VerticalAlignment="Top"/>
 
         <Label x:Name="StatusLabel" Content="Не проигрывается..." Margin="5" />
         <Button x:Name="PlayBtn" Click="PlayBtn_Click" HorizontalAlignment="Left" Width="150">Проигрывать</Button>
@@ -17,7 +18,7 @@
         <Button x:Name="NextLineBtn" Content="Следующая строка" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="200" Click="NextLineBtn_Click"/>
 
         <ListBox
-            ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=SongLines}"
+            ItemsSource="{Binding KaraokeInfoVM.SongLines, ElementName=CreateSongMarkupRoot}"
             Margin="0,10,0,0"
         >
             <ListBox.ItemTemplate>

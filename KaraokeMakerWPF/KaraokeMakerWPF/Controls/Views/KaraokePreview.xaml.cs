@@ -1,4 +1,4 @@
-﻿using KaraokeMakerWPF.Models;
+﻿using KaraokeMakerWPF.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,11 +14,15 @@ public partial class KaraokePreview : UserControl
     private readonly MediaPlayer _mediaPlayer = new();
 
     public static readonly DependencyProperty KaraokeInfoProperty =
-        DependencyProperty.Register("KaraokeInfo", typeof(KaraokeInfo), typeof(KaraokePreview), new PropertyMetadata(null));
+        DependencyProperty.Register(
+            nameof(KaraokeInfoVM),
+            typeof(KaraokeInfoViewModel),
+            typeof(KaraokePreview),
+            new PropertyMetadata(null));
 
-    public KaraokeInfo KaraokeInfo
+    public KaraokeInfoViewModel KaraokeInfoVM
     {
-        get { return (KaraokeInfo)GetValue(KaraokeInfoProperty); }
+        get { return (KaraokeInfoViewModel)GetValue(KaraokeInfoProperty); }
         set { SetValue(KaraokeInfoProperty, value); }
     }
 
@@ -29,7 +33,7 @@ public partial class KaraokePreview : UserControl
 
     private void StartBtn_Click(object sender, RoutedEventArgs e)
     {
-        _mediaPlayer.Open(new Uri(KaraokeInfo.MusicFilePath));
+        _mediaPlayer.Open(new Uri(KaraokeInfoVM.MusicFilePath));
 
         var timer = new DispatcherTimer
         {
@@ -47,7 +51,7 @@ public partial class KaraokePreview : UserControl
         if (_mediaPlayer.Source != null)
         {
             var currentSecond = _mediaPlayer.Position.Seconds;
-            var currentLine = KaraokeInfo.SongLines
+            var currentLine = KaraokeInfoVM.SongLines
                 .FirstOrDefault(x => x.StartTime <= currentSecond && currentSecond <= x.EndTime)?
                 .Text;
 
