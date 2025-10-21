@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using KaraokeMakerWPF.Environment;
+using System.Collections.ObjectModel;
 
 namespace KaraokeMakerWPF.ViewModels;
 
-public class KaraokeInfoViewModel : INotifyPropertyChanged
+public class KaraokeInfoViewModel : NotificationObject
 {
     private string _imageFilePath = string.Empty;
     public string ImageFilePath
@@ -27,7 +27,7 @@ public class KaraokeInfoViewModel : INotifyPropertyChanged
         }
     }
 
-    private string _musicFilePath { get; set; } = string.Empty;
+    private string _musicFilePath = string.Empty;
     public string MusicFilePath
     {
         get => _musicFilePath;
@@ -51,18 +51,9 @@ public class KaraokeInfoViewModel : INotifyPropertyChanged
 
     public void SetSongLines(string[] lines)
     {
-        SongLines = new ObservableCollection<SongLineInfoViewModel>(
-            lines.Select((line, index) => new SongLineInfoViewModel(index, line)));
+        for (var i = 0; i < lines.Length; i++)
+        {
+            SongLines.Add(new SongLineInfoViewModel(i, lines[i]));
+        }
     }
-
-    #region INotifyPropertyChanged
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    #endregion INotifyPropertyChanged
 }

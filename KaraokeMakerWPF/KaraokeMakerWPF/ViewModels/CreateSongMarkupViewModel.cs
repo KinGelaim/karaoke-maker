@@ -1,16 +1,11 @@
-﻿using KaraokeMakerWPF.ViewModels;
-using System.Windows;
-using System.Windows.Controls;
+﻿using KaraokeMakerWPF.Environment;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace KaraokeMakerWPF.Controls.Views;
+namespace KaraokeMakerWPF.ViewModels;
 
-/// <summary>
-/// Логика взаимодействия для CreateSongMarkup.xaml
-/// </summary>
-public partial class CreateSongMarkup : UserControl
+public class CreateSongMarkupViewModel : StepByStepViewModelBase
 {
     private readonly MediaPlayer _mediaPlayer = new();
 
@@ -23,25 +18,46 @@ public partial class CreateSongMarkup : UserControl
     private long _startTime = 0;
     private long _endTime = 0;
 
-    public static readonly DependencyProperty KaraokeInfoProperty =
-        DependencyProperty.Register(
-            nameof(KaraokeInfoVM),
-            typeof(KaraokeInfoViewModel),
-            typeof(CreateSongMarkup),
-            new PropertyMetadata(null));
+    public KaraokeInfoViewModel KaraokeInfoVM { get; init; }
 
-    public KaraokeInfoViewModel KaraokeInfoVM
+    public ICommand PlayCommand { get; }
+    public ICommand StopCommand { get; }
+    public ICommand NextLineCommand { get; }
+    public ICommand PlaySongLineCommand { get; }
+
+    private string _statusLabel = "Не проигрывается...";
+    public string StatusLabelText
     {
-        get { return (KaraokeInfoViewModel)GetValue(KaraokeInfoProperty); }
-        set { SetValue(KaraokeInfoProperty, value); }
+        get => _statusLabel;
+        set
+        {
+            _statusLabel = value;
+            OnPropertyChanged(nameof(StatusLabelText));
+        }
     }
 
-    public CreateSongMarkup()
+    private string _currentLineLabel = string.Empty;
+    public string CurrentLineLabel
     {
-        InitializeComponent();
+        get => _currentLineLabel;
+        set
+        {
+            _currentLineLabel = value;
+            OnPropertyChanged(nameof(CurrentLineLabel));
+        }
     }
 
-    private void PlayBtn_Click(object sender, RoutedEventArgs e)
+    public CreateSongMarkupViewModel(KaraokeInfoViewModel karaokeInfoVM)
+    {
+        KaraokeInfoVM = karaokeInfoVM;
+
+        PlayCommand = new DelegateCommand(Play);
+        StopCommand = new DelegateCommand(Stop);
+        NextLineCommand = new DelegateCommand(NextLine);
+        PlaySongLineCommand = new DelegateCommand<int>(PlaySongLine);
+    }
+
+    private void Play()
     {
         if (string.IsNullOrWhiteSpace(KaraokeInfoVM.MusicFilePath))
         {
@@ -68,7 +84,7 @@ public partial class CreateSongMarkup : UserControl
         _isStartText = false;
     }
 
-    private void StopBtn_Click(object sender, RoutedEventArgs e)
+    private void Stop()
     {
         _mediaPlayer.Stop();
     }
@@ -77,18 +93,18 @@ public partial class CreateSongMarkup : UserControl
     {
         if (_mediaPlayer.Source != null)
         {
-            StatusLabel.Content = string.Format(
+            StatusLabelText = string.Format(
                 "{0} / {1}",
                 _mediaPlayer.Position.ToString(@"mm\:ss"),
                 _mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
         }
         else
         {
-            StatusLabel.Content = "Файл не выбран...";
+            StatusLabelText = "Файл не выбран...";
         }
     }
 
-    private void NextLineBtn_Click(object sender, RoutedEventArgs e)
+    private void NextLine()
     {
         if (!_isPlayMusic)
         {
@@ -129,35 +145,29 @@ public partial class CreateSongMarkup : UserControl
             return;
         }
 
-        CurrentLineLabel.Content = KaraokeInfoVM.SongLines[_currentLineIndex].Text;
+        CurrentLineLabel = KaraokeInfoVM.SongLines[_currentLineIndex].Text;
     }
 
-    private void IndexTextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+    private void PlaySongLine(int index)
     {
-        if (e.ClickCount >= 2)
+        var songLine = KaraokeInfoVM.SongLines.First(x => x.Index == index);
+
+        _mediaPlayer.Stop();
+
+        _mediaPlayer.Position = TimeSpan.FromSeconds(songLine.StartTime);
+
+        var timer = new DispatcherTimer
         {
-            var text = ((TextBlock)sender).Text;
-            var index = int.Parse(text);
+            Interval = TimeSpan.FromSeconds(songLine.EndTime - songLine.StartTime)
+        };
 
-            var songLine = KaraokeInfoVM.SongLines.First(x => x.Index == index);
-
+        timer.Tick += (s, ev) =>
+        {
             _mediaPlayer.Stop();
+            timer.Stop();
+        };
 
-            _mediaPlayer.Position = TimeSpan.FromSeconds(songLine.StartTime);
-
-            var timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(songLine.EndTime - songLine.StartTime)
-            };
-
-            timer.Tick += (s, ev) =>
-            {
-                _mediaPlayer.Stop();
-                timer.Stop();
-            };
-
-            timer.Start();
-            _mediaPlayer.Play();
-        }
+        timer.Start();
+        _mediaPlayer.Play();
     }
 }

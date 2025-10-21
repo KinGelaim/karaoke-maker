@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KaraokeMakerWPF"
         xmlns:components="clr-namespace:KaraokeMakerWPF.Components.StepByStepControl.Views;assembly=KaraokeMakerWPF.Components"
-        xmlns:controls="clr-namespace:KaraokeMakerWPF.Controls.Views"
+        xmlns:views="clr-namespace:KaraokeMakerWPF.Views"
         xmlns:models="clr-namespace:KaraokeMakerWPF.ViewModels"
         d:DataContext="{d:DesignInstance Type=models:MainWindowViewModel}"
         mc:Ignorable="d"
@@ -14,6 +14,10 @@
         MinHeight="500"
         Width="1200"
         MinWidth="820">
+    <Window.DataContext>
+        <models:MainWindowViewModel/>
+    </Window.DataContext>
+
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="120"></RowDefinition>
@@ -21,62 +25,45 @@
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <components:StepByStep x:Name="StepByStepControl" Margin="20"/>
+        <components:StepByStep DataContext="{Binding StepByStepVM}" Margin="20"/>
 
-        <Grid Grid.Row="1">
-            <controls:SelectBackground
-                x:Name="SelectBackgroundControl"
-                ImageFilePath="{Binding KaraokeInfoVM.ImageFilePath, Mode=TwoWay}"
-                Visibility="Collapsed"
-                VerticalAlignment="Top"
-            />
+        <Grid Grid.Row="1" DataContext="{Binding StepByStepViewModel}">
+            <Grid.Resources>
+                <DataTemplate DataType="{x:Type models:SelectBackgroundViewModel}">
+                    <views:SelectBackground DataContext="{Binding}" VerticalAlignment="Top"/>
+                </DataTemplate>
 
-            <controls:SelectFont
-                x:Name="SelectFontControl"
-                FontFilePath="{Binding KaraokeInfoVM.FontFilePath, Mode=TwoWay}"
-                Visibility="Collapsed"
-                VerticalAlignment="Top"
-            />
+                <DataTemplate DataType="{x:Type models:SelectFontViewModel}">
+                    <views:SelectFont DataContext="{Binding}" VerticalAlignment="Top"/>
+                </DataTemplate>
 
-            <controls:SelectMusic
-                x:Name="SelectMusicControl"
-                MusicFilePath="{Binding KaraokeInfoVM.MusicFilePath, Mode=TwoWay}"
-                Visibility="Collapsed"
-                VerticalAlignment="Top"
-            />
+                <DataTemplate DataType="{x:Type models:SelectMusicViewModel}">
+                    <views:SelectMusic DataContext="{Binding}" VerticalAlignment="Top"/>
+                </DataTemplate>
 
-            <controls:SelectSongText
-                x:Name="SelectSongTextControl"
-                KaraokeInfoVM="{Binding KaraokeInfoVM}"
-                Visibility="Collapsed"
-                VerticalAlignment="Top"
-            />
+                <DataTemplate DataType="{x:Type models:SelectSongTextViewModel}">
+                    <views:SelectSongText DataContext="{Binding}" VerticalAlignment="Top"/>
+                </DataTemplate>
 
-            <controls:CreateSongMarkup
-                x:Name="CreateSongMarkupControl"
-                KaraokeInfoVM="{Binding KaraokeInfoVM}"
-                Visibility="Collapsed"
-                VerticalAlignment="Top"
-            />
+                <DataTemplate DataType="{x:Type models:CreateSongMarkupViewModel}">
+                    <views:CreateSongMarkup DataContext="{Binding}" VerticalAlignment="Top"/>
+                </DataTemplate>
 
-            <controls:KaraokePreview
-                x:Name="KaraokePreviewControl"
-                KaraokeInfoVM="{Binding KaraokeInfoVM}"
-                Visibility="Collapsed"
-                VerticalAlignment="Top"
-            />
+                <DataTemplate DataType="{x:Type models:KaraokePreviewViewModel}">
+                    <views:KaraokePreview DataContext="{Binding}" VerticalAlignment="Top"/>
+                </DataTemplate>
 
-            <controls:CreateKaraoke
-                x:Name="CreateKaraokeControl"
-                KaraokeInfoVM="{Binding KaraokeInfoVM}"
-                Visibility="Collapsed"
-                VerticalAlignment="Top"
-            />
+                <DataTemplate DataType="{x:Type models:CreateKaraokeViewModel}">
+                    <views:CreateKaraoke DataContext="{Binding}" VerticalAlignment="Top"/>
+                </DataTemplate>
+            </Grid.Resources>
+
+            <ContentPresenter Content="{Binding}"/>
         </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button x:Name="PreviousStepBtn" Width="150" Click="PreviousStepBtn_Click">Предыдущий шаг</Button>
-            <Button x:Name="NextStepBtn" Width="150" Margin="10,0,0,0" Click="NextStepBtn_Click">Следующий шаг</Button>
+            <Button x:Name="PreviousStepBtn" Width="150" Command="{Binding PreviousStepCommand}">Предыдущий шаг</Button>
+            <Button Width="150" Margin="10,0,0,0" Command="{Binding NextStepCommand}">Следующий шаг</Button>
         </StackPanel>
     </Grid>
 </Window>

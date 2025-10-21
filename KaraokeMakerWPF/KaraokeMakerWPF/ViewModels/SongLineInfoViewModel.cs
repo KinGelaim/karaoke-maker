@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using KaraokeMakerWPF.Environment;
 
 namespace KaraokeMakerWPF.ViewModels;
 
-public class SongLineInfoViewModel : INotifyPropertyChanged
+public class SongLineInfoViewModel : NotificationObject
 {
     public int _index;
     public int Index
@@ -59,15 +59,4 @@ public class SongLineInfoViewModel : INotifyPropertyChanged
         StartTime = startTime;
         EndTime = endTime;
     }
-
-    #region INotifyPropertyChanged
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    #endregion INotifyPropertyChanged
 }

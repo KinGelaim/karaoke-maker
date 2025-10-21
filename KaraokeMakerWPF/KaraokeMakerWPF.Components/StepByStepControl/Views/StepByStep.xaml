@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KaraokeMakerWPF.Components.StepByStepControl.Views"
              xmlns:localModel="clr-namespace:KaraokeMakerWPF.Components.StepByStepControl.Models"
+             xmlns:viewmodels="clr-namespace:KaraokeMakerWPF.Components.StepByStepControl.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:StepByStepViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -110,7 +112,7 @@
 
     <Grid>
         <ItemsControl
-            x:Name="Items"
+            ItemsSource="{Binding Steps}"
             Template="{StaticResource ControlTemplate}"
             ItemTemplate="{StaticResource DataTemplate}"
         />

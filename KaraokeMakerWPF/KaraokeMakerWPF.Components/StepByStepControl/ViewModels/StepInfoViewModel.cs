@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace KaraokeMakerWPF.Components.StepByStepControl.ViewModels;
 
-public class StepInfo : INotifyPropertyChanged
+public class StepInfoViewModel : INotifyPropertyChanged
 {
     public string DisplayName { get; set; }
     public int DisplayNumber { get; set; }
@@ -12,7 +12,7 @@ public class StepInfo : INotifyPropertyChanged
     public StepStatus RightPath { get; set; } = StepStatus.None;
     public StepStatus Circle { get; set; } = StepStatus.Next;
 
-    public StepInfo(string displayName, int displayNumber)
+    public StepInfoViewModel(string displayName, int displayNumber)
     {
         DisplayName = displayName;
         DisplayNumber = displayNumber;

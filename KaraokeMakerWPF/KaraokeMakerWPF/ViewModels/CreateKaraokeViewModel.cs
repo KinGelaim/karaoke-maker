@@ -1,46 +1,61 @@
-﻿using KaraokeMakerWPF.ViewModels;
+﻿using KaraokeMakerWPF.Environment;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
-using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Input;
 
-namespace KaraokeMakerWPF.Controls.Views;
+namespace KaraokeMakerWPF.ViewModels;
 
-/// <summary>
-/// Логика взаимодействия для CreateKaraoke.xaml
-/// </summary>
-public partial class CreateKaraoke : UserControl
+public class CreateKaraokeViewModel : StepByStepViewModelBase
 {
-    public static readonly DependencyProperty KaraokeInfoProperty =
-        DependencyProperty.Register(
-            nameof(KaraokeInfoVM),
-            typeof(KaraokeInfoViewModel),
-            typeof(CreateKaraoke),
-            new PropertyMetadata(null));
+    public KaraokeInfoViewModel KaraokeInfoVM { get; init; }
 
-    public KaraokeInfoViewModel KaraokeInfoVM
+    public ICommand SelectOutputFolderCommand { get; }
+    public ICommand SelectFfmpegCommand { get; }
+    public ICommand CreateKaraokeVideoCommand { get; }
+
+    private string _outputFolderLabelText = string.Empty;
+    public string OutputFolderLabelText
     {
-        get { return (KaraokeInfoViewModel)GetValue(KaraokeInfoProperty); }
-        set { SetValue(KaraokeInfoProperty, value); }
+        get => _outputFolderLabelText;
+        set
+        {
+            _outputFolderLabelText = value;
+            OnPropertyChanged(nameof(OutputFolderLabelText));
+        }
     }
 
-    public CreateKaraoke()
+    private string _ffmpegLabelText = string.Empty;
+    public string FfmpegLabelText
     {
-        InitializeComponent();
+        get => _ffmpegLabelText;
+        set
+        {
+            _ffmpegLabelText = value;
+            OnPropertyChanged(nameof(FfmpegLabelText));
+        }
     }
 
-    private void SelectOutputFolderBtn_Click(object sender, RoutedEventArgs e)
+    public CreateKaraokeViewModel(KaraokeInfoViewModel karaokeInfoVM)
+    {
+        KaraokeInfoVM = karaokeInfoVM;
+
+        SelectOutputFolderCommand = new DelegateCommand(SelectOutputFolder);
+        SelectFfmpegCommand = new DelegateCommand(SelectFfmpeg);
+        CreateKaraokeVideoCommand = new DelegateCommand(CreateKaraokeVideo);
+    }
+
+    private void SelectOutputFolder()
     {
         var outputFolderDialog = new OpenFolderDialog();
 
         if (outputFolderDialog.ShowDialog() == true)
         {
-            OutputFolderLabel.Content = outputFolderDialog.FolderName;
+            OutputFolderLabelText = outputFolderDialog.FolderName;
         }
     }
 
-    private void SelectFfmpegBtn_Click(object sender, RoutedEventArgs e)
+    private void SelectFfmpeg()
     {
         var ffmpegDialog = new OpenFileDialog
         {
@@ -49,13 +64,13 @@ public partial class CreateKaraoke : UserControl
 
         if (ffmpegDialog.ShowDialog() == true)
         {
-            FfmpegLabel.Content = ffmpegDialog.FileName;
+            FfmpegLabelText = ffmpegDialog.FileName;
         }
     }
 
-    private void CreateKaraokeVideoBtn_Click(object sender, RoutedEventArgs e)
+    private void CreateKaraokeVideo()
     {
-        var ffmpegPath = FfmpegLabel.Content.ToString();
+        var ffmpegPath = FfmpegLabelText;
         var imagePath = KaraokeInfoVM.ImageFilePath;
         var musicPath = KaraokeInfoVM.MusicFilePath;
 
@@ -63,7 +78,7 @@ public partial class CreateKaraoke : UserControl
         var fontFileName = Path.GetFileName(KaraokeInfoVM.FontFilePath);
 
         var fileName = $"Karaoke_{Guid.NewGuid()}.mp4";
-        var outputPath = $"{OutputFolderLabel.Content}\\{fileName}";
+        var outputPath = $"{OutputFolderLabelText}\\{fileName}";
 
         var textInfo = string.Empty;
         for (int i = 0; i < KaraokeInfoVM.SongLines.Count; i++)
