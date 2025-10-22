@@ -1,4 +1,5 @@
 ﻿using KaraokeMakerWPF.Environment;
+using KaraokeMakerWPF.Models;
 using Microsoft.Win32;
 using System.Windows.Input;
 
@@ -28,5 +29,15 @@ public class SelectFontViewModel : StepByStepViewModelBase
         {
             KaraokeInfoVM.FontFilePath = fontFileDialog.FileName;
         }
+    }
+
+    public override StepByStepValidationError ValidateBeforeNextStep()
+    {
+        if (string.IsNullOrWhiteSpace(KaraokeInfoVM.FontFilePath))
+        {
+            return StepByStepValidationError.Error("Необходимо выбрать шрифт для создания Караоке!");
+        }
+
+        return StepByStepValidationError.Success();
     }
 }

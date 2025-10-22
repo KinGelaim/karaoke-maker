@@ -1,4 +1,5 @@
 ﻿using KaraokeMakerWPF.Environment;
+using KaraokeMakerWPF.Models;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
@@ -126,5 +127,20 @@ public class CreateKaraokeViewModel : StepByStepViewModelBase
             ? "text_h + 20"
             : "0";
         return $"drawtext=fontfile={fontFileName}:text='{text}':fontcolor={color}:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2 + {offset}:enable='between(t,{startTime},{endTime})',";
+    }
+
+    public override StepByStepValidationError ValidateBeforeNextStep()
+    {
+        if (string.IsNullOrWhiteSpace(OutputFolderLabelText))
+        {
+            return StepByStepValidationError.Error("Необходимо выбрать директорию для создания Караоке!");
+        }
+
+        if (string.IsNullOrWhiteSpace(FfmpegLabelText))
+        {
+            return StepByStepValidationError.Error("Необходимо выбрать файл Ffmpeg для создания Караоке!");
+        }
+
+        return StepByStepValidationError.Success();
     }
 }

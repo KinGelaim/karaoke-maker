@@ -1,4 +1,5 @@
 ﻿using KaraokeMakerWPF.Environment;
+using KaraokeMakerWPF.Models;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows;
@@ -55,5 +56,20 @@ public class SelectSongTextViewModel : StepByStepViewModelBase
 
         var lines = File.ReadAllLines(SongTextFilePath);
         KaraokeInfoVM.SetSongLines(lines);
+    }
+
+    public override StepByStepValidationError ValidateBeforeNextStep()
+    {
+        if (string.IsNullOrWhiteSpace(SongTextFilePath))
+        {
+            return StepByStepValidationError.Error("Необходимо выбрать файл с текстом песни для создания Караоке!");
+        }
+
+        if (KaraokeInfoVM.SongLines.Count == 0)
+        {
+            return StepByStepValidationError.Error("Необходимо распарсить файл с текстом песни для создания Караоке!");
+        }
+
+        return StepByStepValidationError.Success();
     }
 }

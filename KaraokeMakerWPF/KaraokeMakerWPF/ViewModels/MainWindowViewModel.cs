@@ -1,5 +1,6 @@
 ﻿using KaraokeMakerWPF.Components.StepByStepControl.ViewModels;
 using KaraokeMakerWPF.Environment;
+using System.Windows;
 using System.Windows.Input;
 
 namespace KaraokeMakerWPF.ViewModels;
@@ -44,6 +45,28 @@ public class MainWindowViewModel : NotificationObject
         }
     }
 
+    private bool _canGoPrevious;
+    public bool CanGoPrevious
+    {
+        get => _canGoPrevious;
+        set
+        {
+            _canGoPrevious = value;
+            OnPropertyChanged(nameof(CanGoPrevious));
+        }
+    }
+
+    private bool _canGoNext;
+    public bool CanGoNext
+    {
+        get => _canGoNext;
+        set
+        {
+            _canGoNext = value;
+            OnPropertyChanged(nameof(CanGoNext));
+        }
+    }
+
     public MainWindowViewModel()
     {
         var karaokeInfo = new KaraokeInfoViewModel();
@@ -76,20 +99,28 @@ public class MainWindowViewModel : NotificationObject
 
     private void PreviousStep()
     {
-        // TODO: Обработать границы
         _currentStep--;
         UpdateStepByStepViewModel();
     }
 
     private void NextStep()
     {
-        // TODO: Обработать границы
+        var validationResult = StepByStepViewModel.ValidateBeforeNextStep();
+        if (!validationResult.IsValid)
+        {
+            MessageBox.Show(validationResult.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
         _currentStep++;
         UpdateStepByStepViewModel();
     }
 
     private void UpdateStepByStepViewModel()
     {
+        CanGoPrevious = _currentStep > 0;
+        CanGoNext = _currentStep < Steps.Length - 1;
+
         StepByStepVM.SetIndex(_currentStep);
 
         // TODO: обработать окончание

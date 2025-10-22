@@ -1,4 +1,5 @@
 ﻿using KaraokeMakerWPF.Environment;
+using KaraokeMakerWPF.Models;
 using Microsoft.Win32;
 using System.Windows.Input;
 
@@ -28,5 +29,15 @@ public class SelectMusicViewModel : StepByStepViewModelBase
         {
             KaraokeInfoVM.MusicFilePath = musicDialog.FileName;
         }
+    }
+
+    public override StepByStepValidationError ValidateBeforeNextStep()
+    {
+        if (string.IsNullOrWhiteSpace(KaraokeInfoVM.MusicFilePath))
+        {
+            return StepByStepValidationError.Error("Необходимо выбрать музыку для создания Караоке!");
+        }
+
+        return StepByStepValidationError.Success();
     }
 }

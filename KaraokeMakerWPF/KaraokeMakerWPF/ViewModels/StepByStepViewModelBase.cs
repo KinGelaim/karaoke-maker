@@ -1,5 +1,12 @@
 ﻿using KaraokeMakerWPF.Environment;
+using KaraokeMakerWPF.Models;
 
 namespace KaraokeMakerWPF.ViewModels;
 
-public class StepByStepViewModelBase : NotificationObject;
+public abstract class StepByStepViewModelBase : NotificationObject
+{
+    public virtual StepByStepValidationError ValidateBeforeNextStep()
+    {
+        return StepByStepValidationError.Success();
+    }
+}
