@@ -7,6 +7,20 @@ namespace KaraokeMakerWPF.ViewModels;
 
 public class MainWindowViewModel : NotificationObject
 {
+    private bool _isStart = false;
+    public bool IsStart
+    {
+        get => _isStart;
+        set
+        {
+            _isStart = value;
+            OnPropertyChanged(nameof(IsStart));
+            OnPropertyChanged(nameof(IsNotStart));
+        }
+    }
+
+    public bool IsNotStart => !IsStart;
+
     private StepByStepViewModelBase[] Steps = [];
 
     private StepByStepViewModelBase _stepByStepViewModel;
@@ -20,10 +34,11 @@ public class MainWindowViewModel : NotificationObject
         }
     }
 
+    public ICommand StartCommand { get; set; }
     public ICommand PreviousStepCommand { get; set; }
     public ICommand NextStepCommand { get; set; }
 
-    private int _currentStep = 0;
+    private int _currentStep = -1;
     private static readonly string[] _steps = [
         "Фон",
         "Шрифт",
@@ -73,6 +88,7 @@ public class MainWindowViewModel : NotificationObject
 
         InitializeSteps(karaokeInfo);
 
+        StartCommand = new DelegateCommand(Start);
         PreviousStepCommand = new DelegateCommand(PreviousStep);
         NextStepCommand = new DelegateCommand(NextStep);
     }
@@ -92,8 +108,13 @@ public class MainWindowViewModel : NotificationObject
             new CreateKaraokeViewModel(karaokeInfo)
         ];
 
-        _currentStep = 0;
+        UpdateStepByStepViewModel();
+    }
 
+    private void Start()
+    {
+        IsStart = true;
+        _currentStep = 0;
         UpdateStepByStepViewModel();
     }
 

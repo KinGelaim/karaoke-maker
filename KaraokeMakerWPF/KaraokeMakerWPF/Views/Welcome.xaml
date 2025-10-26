@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="KaraokeMakerWPF.Views.Welcome"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KaraokeMakerWPF.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="WelcomeRoot">
+    <StackPanel>
+        <TextBlock
+            Text="Добро пожаловать в приложению по полуавтоматическому созданию КАРАОКЕ!!!"
+            FontSize="24"
+            TextWrapping="Wrap"
+        />
+
+        <TextBlock
+            Text="Данное приложение разработано исключительно с ознакомительной целью и предназначено для некоммерческого использования"
+            FontSize="14"
+            TextWrapping="Wrap"
+        />
+
+        <TextBlock
+            Text="Все материалы используемые в данном приложении распространяются по открытым лицензиям"
+            FontSize="14"
+            TextWrapping="Wrap"
+        />
+
+        <TextBlock
+            Text="Приложение не является законченным программным обеспечением, а значит оставаясь в нём вы соглашаетесь на появление возможных ошибок и недоработок"
+            FontSize="14"
+            TextWrapping="Wrap"
+        />
+
+        <Button
+            Content="Начать создание КАРАОКЕ!!!"
+            Margin="0,10,0,0"
+            Command="{Binding StartButton, ElementName=WelcomeRoot}"
+        />
+    </StackPanel>
+</UserControl>

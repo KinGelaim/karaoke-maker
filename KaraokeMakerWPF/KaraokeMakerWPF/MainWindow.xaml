@@ -26,68 +26,83 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="120"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
 
         <components:StepByStep DataContext="{Binding StepByStepVM}" Margin="20"/>
 
-        <Grid Grid.Row="1" DataContext="{Binding StepByStepViewModel}">
-            <Grid.Resources>
-                <DataTemplate DataType="{x:Type models:SelectBackgroundViewModel}">
-                    <views:SelectBackground DataContext="{Binding}" VerticalAlignment="Top"/>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type models:SelectFontViewModel}">
-                    <views:SelectFont DataContext="{Binding}" VerticalAlignment="Top"/>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type models:SelectMusicViewModel}">
-                    <views:SelectMusic DataContext="{Binding}" VerticalAlignment="Top"/>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type models:SelectSongTextViewModel}">
-                    <views:SelectSongText DataContext="{Binding}" VerticalAlignment="Top"/>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type models:CreateSongMarkupViewModel}">
-                    <views:CreateSongMarkup DataContext="{Binding}" VerticalAlignment="Top"/>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type models:KaraokePreviewViewModel}">
-                    <views:KaraokePreview DataContext="{Binding}" VerticalAlignment="Top"/>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type models:CreateKaraokeViewModel}">
-                    <views:CreateKaraoke DataContext="{Binding}" VerticalAlignment="Top"/>
-                </DataTemplate>
-            </Grid.Resources>
-
-            <ContentPresenter Content="{Binding}"/>
+        <Grid
+            Grid.Row="1"
+            Visibility="{Binding IsNotStart, Converter={StaticResource BooleanToVisibilityConverter}}"
+        >
+            <views:Welcome StartButton="{Binding StartCommand}"/>
         </Grid>
+        <Grid
+            Grid.Row="1"
+            Visibility="{Binding IsStart, Converter={StaticResource BooleanToVisibilityConverter}}"
+        >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <Grid Grid.Row="0" DataContext="{Binding StepByStepViewModel}">
+                <Grid.Resources>
+                    <DataTemplate DataType="{x:Type models:SelectBackgroundViewModel}">
+                        <views:SelectBackground DataContext="{Binding}" VerticalAlignment="Top"/>
+                    </DataTemplate>
 
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+                    <DataTemplate DataType="{x:Type models:SelectFontViewModel}">
+                        <views:SelectFont DataContext="{Binding}" VerticalAlignment="Top"/>
+                    </DataTemplate>
 
-            <Button
-                Grid.Column="0"
-                Content="Предыдущий шаг"
-                Width="150"
-                Command="{Binding PreviousStepCommand}"
-                Visibility="{Binding CanGoPrevious, Converter={StaticResource BooleanToVisibilityConverter}}"
-                HorizontalAlignment="Left"
-            />
+                    <DataTemplate DataType="{x:Type models:SelectMusicViewModel}">
+                        <views:SelectMusic DataContext="{Binding}" VerticalAlignment="Top"/>
+                    </DataTemplate>
 
-            <Button
-                Grid.Column="1"
-                Content="Следующий шаг"
-                Width="150"
-                Command="{Binding NextStepCommand}"
-                Visibility="{Binding CanGoNext, Converter={StaticResource BooleanToVisibilityConverter}}"
-                HorizontalAlignment="Right"
-            />
+                    <DataTemplate DataType="{x:Type models:SelectSongTextViewModel}">
+                        <views:SelectSongText DataContext="{Binding}" VerticalAlignment="Top"/>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type models:CreateSongMarkupViewModel}">
+                        <views:CreateSongMarkup DataContext="{Binding}" VerticalAlignment="Top"/>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type models:KaraokePreviewViewModel}">
+                        <views:KaraokePreview DataContext="{Binding}" VerticalAlignment="Top"/>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type models:CreateKaraokeViewModel}">
+                        <views:CreateKaraoke DataContext="{Binding}" VerticalAlignment="Top"/>
+                    </DataTemplate>
+                </Grid.Resources>
+
+                <ContentPresenter Content="{Binding}"/>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Content="Предыдущий шаг"
+                    Width="150"
+                    Command="{Binding PreviousStepCommand}"
+                    Visibility="{Binding CanGoPrevious, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    HorizontalAlignment="Left"
+                />
+
+                <Button
+                    Grid.Column="1"
+                    Content="Следующий шаг"
+                    Width="150"
+                    Command="{Binding NextStepCommand}"
+                    Visibility="{Binding CanGoNext, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    HorizontalAlignment="Right"
+                />
+            </Grid>
         </Grid>
     </Grid>
 </Window>
