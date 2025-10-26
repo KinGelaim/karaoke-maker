@@ -5,19 +5,36 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KaraokeMakerWPF.Views"
              xmlns:viewmodels="clr-namespace:KaraokeMakerWPF.ViewModels"
+             xmlns:converters="clr-namespace:KaraokeMakerWPF.Converters"
              d:DataContext="{d:DesignInstance Type=viewmodels:SelectBackgroundViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:StringToBitmapImageConverter x:Key="StringToBitmapImageConverter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Button
             Content="Выбрать изображение"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Height="30"
             Width="200"
             Command="{Binding SelectImagePathCommand}"
         />
-        <Label Content="{Binding KaraokeInfoVM.ImageFilePath}" Margin="205,2,0,0" VerticalAlignment="Top"/>
-        <Image Source="{Binding KaraokeInfoVM.ImageFilePath}" Margin="0,40,0,0" Width="800"/>
+        <Image
+            Source="{Binding KaraokeInfoVM.ImageFilePath, Converter={StaticResource StringToBitmapImageConverter}}"
+            Margin="0,40,0,0"
+            Width="800"
+        />
+        <ComboBox
+            ItemsSource="{Binding Images}"
+            SelectedValue="{Binding KaraokeInfoVM.ImageFilePath}"
+            SelectedValuePath="ImagePath"
+            DisplayMemberPath="DisplayText"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Width="250"
+        />
     </Grid>
 </UserControl>

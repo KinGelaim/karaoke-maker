@@ -17,4 +17,23 @@
     <ProjectReference Include="..\KaraokeMakerWPF.Components\KaraokeMakerWPF.Components.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Backgrounds\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Backgrounds\background_1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Backgrounds\background_2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Backgrounds\background_3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Backgrounds\background_4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
