@@ -15,8 +15,8 @@ public sealed class CreateSongMarkupViewModel : StepByStepViewModelBase
     private bool _isPlayMusic = false;
     private bool _isStartText = false;
 
-    private long _startTime = 0;
-    private long _endTime = 0;
+    private double _startTime = 0;
+    private double _endTime = 0;
 
     public KaraokeInfoViewModel KaraokeInfoVM { get; init; }
 
@@ -113,12 +113,12 @@ public sealed class CreateSongMarkupViewModel : StepByStepViewModelBase
 
         if (!_isStartText)
         {
-            _startTime = _mediaPlayer.Position.Seconds;
+            _startTime = _mediaPlayer.Position.TotalSeconds;
             _isStartText = true;
         }
         else
         {
-            _endTime = _mediaPlayer.Position.Seconds;
+            _endTime = _mediaPlayer.Position.TotalSeconds;
 
             if (_currentLineIndex < _maxLineIndex)
             {

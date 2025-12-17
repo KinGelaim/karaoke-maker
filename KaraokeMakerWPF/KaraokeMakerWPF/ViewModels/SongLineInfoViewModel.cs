@@ -15,8 +15,8 @@ public sealed class SongLineInfoViewModel : NotificationObject
         }
     }
 
-    private long _startTime;
-    public long StartTime
+    private double _startTime;
+    public double StartTime
     {
         get => _startTime;
         set
@@ -26,8 +26,8 @@ public sealed class SongLineInfoViewModel : NotificationObject
         }
     }
 
-    private long _endTime;
-    public long EndTime
+    private double _endTime;
+    public double EndTime
     {
         get => _endTime;
         set
@@ -54,7 +54,7 @@ public sealed class SongLineInfoViewModel : NotificationObject
         Text = text;
     }
 
-    public void SetTime(long startTime, long endTime)
+    public void SetTime(double startTime, double endTime)
     {
         StartTime = startTime;
         EndTime = endTime;

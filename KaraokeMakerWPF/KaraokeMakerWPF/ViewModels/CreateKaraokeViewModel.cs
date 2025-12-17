@@ -118,15 +118,15 @@ public sealed class CreateKaraokeViewModel : StepByStepViewModelBase
     private string CreateSongLineCode(
         string fontFileName,
         string text,
-        long startTime,
-        long endTime,
+        double startTime,
+        double endTime,
         string color,
         bool needOffset)
     {
         var offset = needOffset
             ? "text_h + 20"
             : "0";
-        return $"drawtext=fontfile={fontFileName}:text='{text}':fontcolor={color}:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2 + {offset}:enable='between(t,{startTime},{endTime})',";
+        return $"drawtext=fontfile={fontFileName}:text='{text}':fontcolor={color}:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2 + {offset}:enable='between(t,{startTime.ToString(CultureInfo.InvariantCulture)},{endTime.ToString(CultureInfo.InvariantCulture)})',";
     }
 
     public override StepByStepValidationError ValidateBeforeNextStep()
