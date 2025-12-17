@@ -49,13 +49,13 @@ public class DelegateCommand : ICommand
 
 public class DelegateCommand<T> : ICommand
 {
-    private readonly Action<T> _executeMethod;
+    private readonly Action<T?> _executeMethod;
 
-    private readonly Func<T, bool>? _canExecuteMethod;
+    private readonly Func<T?, bool>? _canExecuteMethod;
 
-    public DelegateCommand(Action<T> execute) : this(execute, null) { }
+    public DelegateCommand(Action<T?> execute) : this(execute, null) { }
 
-    public DelegateCommand(Action<T> execute, Func<T, bool>? canExecute)
+    public DelegateCommand(Action<T?> execute, Func<T?, bool>? canExecute)
     {
         ArgumentNullException.ThrowIfNull(execute);
 
@@ -63,9 +63,9 @@ public class DelegateCommand<T> : ICommand
         _canExecuteMethod = canExecute;
     }
 
-    public bool CanExecute(T parameter) => _canExecuteMethod == null || _canExecuteMethod(parameter);
+    public bool CanExecute(T? parameter) => _canExecuteMethod == null || _canExecuteMethod(parameter);
 
-    public void Execute(T parameter)
+    public void Execute(T? parameter)
     {
         if (_executeMethod == null)
         {
@@ -84,14 +84,14 @@ public class DelegateCommand<T> : ICommand
     }
 
     [DebuggerStepThrough]
-    bool ICommand.CanExecute(object parameter)
+    bool ICommand.CanExecute(object? parameter)
     {
         return parameter != null || !typeof(T).IsValueType
-            ? CanExecute((T)parameter)
+            ? CanExecute((T?)parameter)
             : _canExecuteMethod == null;
     }
 
-    void ICommand.Execute(object parameter) => Execute((T)parameter);
+    void ICommand.Execute(object? parameter) => Execute((T?)parameter);
 
     #endregion ICommand
 }

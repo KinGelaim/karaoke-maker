@@ -5,7 +5,7 @@ using System.Windows.Threading;
 
 namespace KaraokeMakerWPF.ViewModels;
 
-public class CreateSongMarkupViewModel : StepByStepViewModelBase
+public sealed class CreateSongMarkupViewModel : StepByStepViewModelBase
 {
     private readonly MediaPlayer _mediaPlayer = new();
 

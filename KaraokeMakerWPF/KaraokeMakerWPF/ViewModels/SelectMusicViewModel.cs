@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace KaraokeMakerWPF.ViewModels;
 
-public class SelectMusicViewModel : StepByStepViewModelBase
+public sealed class SelectMusicViewModel : StepByStepViewModelBase
 {
     public KaraokeInfoViewModel KaraokeInfoVM { get; init; }
 

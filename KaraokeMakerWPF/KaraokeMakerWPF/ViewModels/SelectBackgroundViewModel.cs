@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace KaraokeMakerWPF.ViewModels;
 
-public class SelectBackgroundViewModel : StepByStepViewModelBase
+public sealed class SelectBackgroundViewModel : StepByStepViewModelBase
 {
     public KaraokeInfoViewModel KaraokeInfoVM { get; init; }
 

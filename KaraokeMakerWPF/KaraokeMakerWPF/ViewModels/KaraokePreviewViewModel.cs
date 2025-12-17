@@ -5,7 +5,7 @@ using System.Windows.Threading;
 
 namespace KaraokeMakerWPF.ViewModels;
 
-public class KaraokePreviewViewModel : StepByStepViewModelBase
+public sealed class KaraokePreviewViewModel : StepByStepViewModelBase
 {
     private readonly MediaPlayer _mediaPlayer = new();
 

@@ -2,7 +2,7 @@
 
 namespace KaraokeMakerWPF.ViewModels;
 
-public class SongLineInfoViewModel : NotificationObject
+public sealed class SongLineInfoViewModel : NotificationObject
 {
     public int _index;
     public int Index

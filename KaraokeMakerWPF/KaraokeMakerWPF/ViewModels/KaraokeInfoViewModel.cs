@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace KaraokeMakerWPF.ViewModels;
 
-public class KaraokeInfoViewModel : NotificationObject
+public sealed class KaraokeInfoViewModel : NotificationObject
 {
     private string _imageFilePath = string.Empty;
     public string ImageFilePath

@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace KaraokeMakerWPF.ViewModels;
 
-public class MainWindowViewModel : NotificationObject
+public sealed class MainWindowViewModel : NotificationObject
 {
     private bool _isStart = false;
     public bool IsStart
