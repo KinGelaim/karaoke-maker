@@ -2,6 +2,7 @@
 using KaraokeMakerWPF.Models;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Windows.Input;
 
@@ -78,8 +79,9 @@ public sealed class CreateKaraokeViewModel : StepByStepViewModelBase
         // Шрифт должен лежать возле либы (TODO: поправить на абсолютный путь?)
         var fontFileName = Path.GetFileName(KaraokeInfoVM.FontFilePath);
 
-        var fileName = $"Karaoke_{Guid.NewGuid()}.mp4";
-        var outputPath = $"{OutputFolderLabelText}\\{fileName}";
+        var fileName = $"Karaoke_{Guid.NewGuid()}";
+        var outputFileName = $"{fileName}.mp4";
+        var outputPath = $"{OutputFolderLabelText}\\{outputFileName}";
 
         var textInfo = string.Empty;
         for (int i = 0; i < KaraokeInfoVM.SongLines.Count; i++)
@@ -110,8 +112,18 @@ public sealed class CreateKaraokeViewModel : StepByStepViewModelBase
         }
         textInfo = textInfo.TrimEnd(',');
 
-        var command = ffmpegPath + " -loop 1 -i \"" + imagePath + "\" -i \"" + musicPath + "\" -shortest -vf \"" + textInfo + "\" -codec:a copy \"" + outputPath + "\" -y";
-        var process = Process.Start("cmd.exe", @"/c " + command);
+        var command = $"@chcp 65001\n\r\"" + ffmpegPath + "\" -loop 1 -i \"" + imagePath + "\" -i \"" + musicPath + "\" -shortest -vf \"" + textInfo + "\" -codec:a copy \"" + outputPath + "\" -y";
+
+        var commandFilePath = $"{OutputFolderLabelText}\\{fileName}.bat";
+        File.WriteAllText(commandFilePath, command);
+
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = "cmd.exe",
+            Arguments = $"/k \"{commandFilePath}\""
+        };
+
+        using var process = Process.Start(startInfo);
         process.WaitForExit();
     }
 
