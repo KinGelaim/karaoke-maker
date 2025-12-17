@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="KaraokeMakerWPF.Components/KaraokeMakerWPF.Components.csproj" />
+  <Project Path="KaraokeMakerWPF/KaraokeMakerWPF.csproj" />
+</Solution>
