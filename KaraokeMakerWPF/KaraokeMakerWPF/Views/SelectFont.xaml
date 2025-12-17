@@ -5,10 +5,68 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KaraokeMakerWPF.Views"
              xmlns:viewmodels="clr-namespace:KaraokeMakerWPF.ViewModels"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              d:DataContext="{d:DesignInstance Type=viewmodels:SelectFontViewModel}"
-             mc:Ignorable="d" d:DesignWidth="800" Height="45">
+             mc:Ignorable="d"
+             d:DesignHeight="350" d:DesignWidth="800">
     <Grid>
-        <Button Content="Выбрать файл со шрифтом" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="310" Command="{Binding SelectFontPathCommand}"/>
-        <Label Content="{Binding KaraokeInfoVM.FontFilePath}" Margin="316,2,0,0" VerticalAlignment="Top"/>
+        <!-- Шрифт -->
+        <ComboBox
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Width="150"
+            Height="30"
+        />
+        <!-- Положение текста -->
+        <ComboBox
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Width="150"
+            Height="30"
+            Margin="155,0,0,0"
+        />
+        <!-- Цвет шрифта -->
+        <xctk:ColorPicker
+            Margin="310,0,0,0"
+            Height="30"
+            Width="50"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+        />
+        <!-- Цвет фона -->
+        <xctk:ColorPicker
+            Margin="365,0,0,0"
+            Height="30"
+            Width="50"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+        />
+        <Button
+            Content="Выбрать файл со шрифтом"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Height="30"
+            Width="200"
+            Command="{Binding SelectFontPathCommand}"
+        />
+        <Image
+            Source="{Binding KaraokeInfoVM.ImageFilePath}"
+            Margin="0,40,0,0"
+            Width="800"
+        />
+        <TextBlock
+            Text="Активная строка песни"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            FontSize="24"
+            Margin="0,134,0,0"
+        />
+        <TextBlock
+            Text="Следующая строка песни"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            FontSize="24"
+            Margin="0,179,0,0"
+        />
     </Grid>
 </UserControl>

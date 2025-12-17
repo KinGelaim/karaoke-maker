@@ -12,8 +12,18 @@
     <UserControl.Resources>
         <converters:StringToBitmapImageConverter x:Key="StringToBitmapImageConverter"/>
     </UserControl.Resources>
-    
+
     <Grid>
+        <ComboBox
+            ItemsSource="{Binding Images}"
+            SelectedValue="{Binding KaraokeInfoVM.ImageFilePath}"
+            SelectedValuePath="ImagePath"
+            DisplayMemberPath="DisplayText"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Width="250"
+            Height="30"
+        />
         <Button
             Content="Выбрать изображение"
             HorizontalAlignment="Right"
@@ -26,15 +36,6 @@
             Source="{Binding KaraokeInfoVM.ImageFilePath, Converter={StaticResource StringToBitmapImageConverter}}"
             Margin="0,40,0,0"
             Width="800"
-        />
-        <ComboBox
-            ItemsSource="{Binding Images}"
-            SelectedValue="{Binding KaraokeInfoVM.ImageFilePath}"
-            SelectedValuePath="ImagePath"
-            DisplayMemberPath="DisplayText"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Width="250"
         />
     </Grid>
 </UserControl>
