@@ -51,6 +51,7 @@ public sealed class KaraokeInfoViewModel : NotificationObject
 
     public void SetSongLines(string[] lines)
     {
+        SongLines.Clear();
         for (var i = 0; i < lines.Length; i++)
         {
             SongLines.Add(new SongLineInfoViewModel(i, lines[i]));

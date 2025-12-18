@@ -76,8 +76,7 @@ public sealed class CreateKaraokeViewModel : StepByStepViewModelBase
         var imagePath = KaraokeInfoVM.ImageFilePath;
         var musicPath = KaraokeInfoVM.MusicFilePath;
 
-        // Шрифт должен лежать возле либы (TODO: поправить на абсолютный путь?)
-        var fontFileName = Path.GetFileName(KaraokeInfoVM.FontFilePath);
+        var fontFileName = KaraokeInfoVM.FontFilePath;
 
         var fileName = $"Karaoke_{Guid.NewGuid()}";
         var outputFileName = $"{fileName}.mp4";
@@ -124,7 +123,7 @@ public sealed class CreateKaraokeViewModel : StepByStepViewModelBase
         };
 
         using var process = Process.Start(startInfo);
-        process.WaitForExit();
+        process?.WaitForExit();
     }
 
     private string CreateSongLineCode(
@@ -135,10 +134,22 @@ public sealed class CreateKaraokeViewModel : StepByStepViewModelBase
         string color,
         bool needOffset)
     {
+        var fontFilePath = fontFileName.Replace("\\", "/").Replace(":", "\\:");
+
+        var normalizedText = TextNormalization(text);
+
         var offset = needOffset
             ? "text_h + 20"
             : "0";
-        return $"drawtext=fontfile={fontFileName}:text='{text}':fontcolor={color}:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2 + {offset}:enable='between(t,{startTime.ToString(CultureInfo.InvariantCulture)},{endTime.ToString(CultureInfo.InvariantCulture)})',";
+        return $"drawtext=fontfile='{fontFilePath}':text='{normalizedText}':fontcolor={color}:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2 + {offset}:enable='between(t,{startTime.ToString(CultureInfo.InvariantCulture)},{endTime.ToString(CultureInfo.InvariantCulture)})',";
+    }
+
+    public string TextNormalization(string text)
+    {
+        return text
+            .Replace("\"", "\\\"")
+            .Replace("'", "\'")
+            .Replace("\\", "\\\\");
     }
 
     public override StepByStepValidationError ValidateBeforeNextStep()
