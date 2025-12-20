@@ -8,6 +8,7 @@ namespace KaraokeMakerWPF.ViewModels;
 public sealed class CreateSongMarkupViewModel : StepByStepViewModelBase
 {
     private readonly MediaPlayer _mediaPlayer = new();
+    private DispatcherTimer? _timer;
 
     private int _currentLineIndex = 0;
     private int _maxLineIndex = 0;
@@ -156,18 +157,20 @@ public sealed class CreateSongMarkupViewModel : StepByStepViewModelBase
 
         _mediaPlayer.Position = TimeSpan.FromSeconds(songLine.StartTime);
 
-        var timer = new DispatcherTimer
+        _timer?.Stop();
+
+        _timer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(songLine.EndTime - songLine.StartTime)
         };
 
-        timer.Tick += (s, ev) =>
+        _timer.Tick += (s, ev) =>
         {
             _mediaPlayer.Stop();
-            timer.Stop();
+            _timer.Stop();
         };
 
-        timer.Start();
+        _timer.Start();
         _mediaPlayer.Play();
     }
 }
