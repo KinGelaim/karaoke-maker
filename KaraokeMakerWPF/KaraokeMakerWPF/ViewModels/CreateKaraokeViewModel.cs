@@ -138,10 +138,13 @@ public sealed class CreateKaraokeViewModel : StepByStepViewModelBase
 
         var normalizedText = TextNormalization(text);
 
+        var startTimeStr = Math.Round(startTime, 3).ToString(CultureInfo.InvariantCulture);
+        var endTimeStr = Math.Round(endTime, 3).ToString(CultureInfo.InvariantCulture);
+
         var offset = needOffset
-            ? "text_h + 20"
+            ? "text_h+20"
             : "0";
-        return $"drawtext=fontfile='{fontFilePath}':text='{normalizedText}':fontcolor={color}:fontsize=(h/21):box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2 + {offset}:enable='between(t,{startTime.ToString(CultureInfo.InvariantCulture)},{endTime.ToString(CultureInfo.InvariantCulture)})',";
+        return $"drawtext=fontfile='{fontFilePath}':text='{normalizedText}':fontcolor={color}:fontsize=(h/21):box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2+{offset}:enable='between(t,{startTimeStr},{endTimeStr})',";
     }
 
     public string TextNormalization(string text)
