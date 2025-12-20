@@ -111,7 +111,7 @@ public sealed class CreateKaraokeViewModel : StepByStepViewModelBase
         }
         textInfo = textInfo.TrimEnd(',');
 
-        var command = $"@chcp 65001\n\r\"" + ffmpegPath + "\" -loop 1 -i \"" + imagePath + "\" -i \"" + musicPath + "\" -shortest -vf \"" + textInfo + "\" -codec:a copy \"" + outputPath + "\" -y";
+        var command = $"@chcp 65001\n\r\"" + ffmpegPath + "\" -loop 1 -i \"" + imagePath + "\" -i \"" + musicPath + "\" -shortest -vf \"scale=1920:1080, " + textInfo + "\" -codec:a copy \"" + outputPath + "\" -y";
 
         var commandFilePath = $"{OutputFolderLabelText}\\{fileName}.bat";
         File.WriteAllText(commandFilePath, command);
@@ -141,7 +141,7 @@ public sealed class CreateKaraokeViewModel : StepByStepViewModelBase
         var offset = needOffset
             ? "text_h + 20"
             : "0";
-        return $"drawtext=fontfile='{fontFilePath}':text='{normalizedText}':fontcolor={color}:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2 + {offset}:enable='between(t,{startTime.ToString(CultureInfo.InvariantCulture)},{endTime.ToString(CultureInfo.InvariantCulture)})',";
+        return $"drawtext=fontfile='{fontFilePath}':text='{normalizedText}':fontcolor={color}:fontsize=(h/21):box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2 + {offset}:enable='between(t,{startTime.ToString(CultureInfo.InvariantCulture)},{endTime.ToString(CultureInfo.InvariantCulture)})',";
     }
 
     public string TextNormalization(string text)
