@@ -48,6 +48,17 @@ public sealed class CreateSongMarkupViewModel : StepByStepViewModelBase
         }
     }
 
+    private string _lineBtnLabel = "Начало слов песни";
+    public string LineBtnLabel
+    {
+        get => _lineBtnLabel;
+        set
+        {
+            _lineBtnLabel = value;
+            OnPropertyChanged(nameof(LineBtnLabel));
+        }
+    }
+
     public CreateSongMarkupViewModel(KaraokeInfoViewModel karaokeInfoVM)
     {
         KaraokeInfoVM = karaokeInfoVM;
@@ -83,6 +94,7 @@ public sealed class CreateSongMarkupViewModel : StepByStepViewModelBase
         _mediaPlayer.Play();
         _isPlayMusic = true;
         _isStartText = false;
+        LineBtnLabel = "Начало песни";
     }
 
     private void Stop()
@@ -116,6 +128,7 @@ public sealed class CreateSongMarkupViewModel : StepByStepViewModelBase
         {
             _startTime = _mediaPlayer.Position.TotalSeconds;
             _isStartText = true;
+            LineBtnLabel = "Следующая строка";
         }
         else
         {

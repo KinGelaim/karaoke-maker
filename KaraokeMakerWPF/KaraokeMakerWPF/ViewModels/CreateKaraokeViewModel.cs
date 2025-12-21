@@ -1,6 +1,7 @@
 ﻿using KaraokeMakerWPF.Environment;
 using KaraokeMakerWPF.Models;
 using Microsoft.Win32;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -79,51 +80,78 @@ public sealed class CreateKaraokeViewModel : StepByStepViewModelBase
         var fontFileName = KaraokeInfoVM.FontFilePath;
 
         var fileName = $"Karaoke_{Guid.NewGuid()}";
-        var outputFileName = $"{fileName}.mp4";
-        var outputPath = $"{OutputFolderLabelText}\\{outputFileName}";
+        var outputExtension = "mp4";
 
-        var textInfo = string.Empty;
-        for (int i = 0; i < KaraokeInfoVM.SongLines.Count; i++)
-        {
-            var currentSongLine = KaraokeInfoVM.SongLines[i];
-            var nextSongLine = i < KaraokeInfoVM.SongLines.Count - 1
-                ? KaraokeInfoVM.SongLines[i + 1]
-                : null;
+        // 1. Создаём видео
+        var tempVideoOutputPath = $"{OutputFolderLabelText}\\{fileName}_0.{outputExtension}";
+        var createVideoCommand = "@chcp 65001\n\r\"" + ffmpegPath + "\" -loop 1 -i \"" + imagePath + "\" -i \"" + musicPath + "\" -shortest -vf \"scale=1920:1080\" -codec:a copy \"" + tempVideoOutputPath + "\" -y";
 
-            textInfo += CreateSongLineCode(
-                fontFileName,
-                currentSongLine.Text,
-                currentSongLine.StartTime,
-                currentSongLine.EndTime,
-                "red",
-                i % 2 == 1);
-
-            if (nextSongLine != null)
-            {
-                textInfo += CreateSongLineCode(
-                    fontFileName,
-                    nextSongLine.Text,
-                    currentSongLine.StartTime,
-                    currentSongLine.EndTime,
-                    "white",
-                    i % 2 == 0);
-            }
-        }
-        textInfo = textInfo.TrimEnd(',');
-
-        var command = $"@chcp 65001\n\r\"" + ffmpegPath + "\" -loop 1 -i \"" + imagePath + "\" -i \"" + musicPath + "\" -shortest -vf \"scale=1920:1080, " + textInfo + "\" -codec:a copy \"" + outputPath + "\" -y";
-
-        var commandFilePath = $"{OutputFolderLabelText}\\{fileName}.bat";
-        File.WriteAllText(commandFilePath, command);
+        var createVideoCommandFilePath = $"{OutputFolderLabelText}\\{fileName}_0.bat";
+        File.WriteAllText(createVideoCommandFilePath, createVideoCommand);
 
         var startInfo = new ProcessStartInfo
         {
             FileName = "cmd.exe",
-            Arguments = $"/k \"{commandFilePath}\""
+            Arguments = $"/c \"{createVideoCommandFilePath}\""
         };
 
-        using var process = Process.Start(startInfo);
-        process?.WaitForExit();
+        using var createVideoProcess = Process.Start(startInfo);
+        createVideoProcess?.WaitForExit();
+
+        // 2. Разбиваем всю песню кусками на N строк
+        var chunkSize = 30;
+        var chunks = KaraokeInfoVM.SongLines.Chunk(chunkSize);
+
+        var currentChunk = 0;
+        foreach (var chunk in chunks)
+        {
+            // 3. Добавляем в видео по N строк песни
+            var textInfo = string.Empty;
+            for (int i = 0; i < chunk.Length; i++)
+            {
+                var currentSongLine = chunk[i];
+                var nextSongLine = i < chunk.Length - 1
+                    ? chunk[i + 1]
+                    : null;
+
+                textInfo += CreateSongLineCode(
+                    fontFileName,
+                    currentSongLine.Text,
+                    currentSongLine.StartTime,
+                    currentSongLine.EndTime,
+                    "red",
+                    i % 2 == 1);
+
+                if (nextSongLine != null)
+                {
+                    textInfo += CreateSongLineCode(
+                        fontFileName,
+                        nextSongLine.Text,
+                        currentSongLine.StartTime,
+                        currentSongLine.EndTime,
+                        "white",
+                        i % 2 == 0);
+                }
+            }
+            textInfo = textInfo.TrimEnd(',');
+
+            var inputPath = $"{OutputFolderLabelText}\\{fileName}_{currentChunk}.{outputExtension}";
+            var outputPath = $"{OutputFolderLabelText}\\{fileName}_{++currentChunk}.{outputExtension}";
+
+            var command = "@chcp 65001\n\r\"" + ffmpegPath + $"\" -i \"{inputPath}\"" + " -vf \"" + textInfo + "\" -codec:a copy \"" + outputPath + "\" -y";
+
+            var commandFilePath = $"{OutputFolderLabelText}\\{fileName}_{currentChunk}.bat";
+            File.WriteAllText(commandFilePath, command);
+
+            startInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/c \"{commandFilePath}\""
+            };
+
+            using var process = Process.Start(startInfo);
+            process?.WaitForExit();
+        }
     }
 
     private string CreateSongLineCode(
